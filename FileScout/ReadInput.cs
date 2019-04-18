@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace FileScout
 {
@@ -27,9 +23,9 @@ namespace FileScout
 
                 do
                 {
+                    string[] directoryArray = CombineArrays(DisplayFiles.currentPath);
 
-                    string[] directoryArray = Directory.GetFileSystemEntries( DisplayFiles.currentPath );
-                    Array.Sort( directoryArray );
+
 
                     if (directoryArray.Length != 0)
                         selectedFile = directoryArray[Cursor.cursorPosY];
@@ -69,16 +65,7 @@ namespace FileScout
                             {
                                 if (Directory.GetParent( DisplayFiles.currentPath ) != null)
                                 {
-                                    parentDirectory = Directory.GetParent( DisplayFiles.currentPath ).ToString();
-                                    currentFileList = Directory.GetFileSystemEntries( parentDirectory );
-                                    for (int i = 0; i < currentFileList.Length; i++)
-                                    {
-                                        if (string.Compare( DisplayFiles.currentPath, currentFileList[i] ) == 0)
-                                        {
-                                            Cursor.cursorPosY = i;
-                                        }
-                                    }
-
+                                    GetPreviousCursorPosition();
 
                                     if (Directory.GetParent( DisplayFiles.currentPath ) != null)
                                         DisplayFiles.currentPath = Directory.GetParent( DisplayFiles.currentPath ).ToString();
@@ -100,19 +87,35 @@ namespace FileScout
                 Console.Clear();
                 Console.WriteLine("Access Denied");
                 Thread.Sleep(300);
-                parentDirectory = Directory.GetParent( DisplayFiles.currentPath ).ToString();
-                currentFileList = Directory.GetFileSystemEntries( parentDirectory );
-                for (int i = 0; i < currentFileList.Length; i++)
-                {
-                    if (string.Compare( DisplayFiles.currentPath, currentFileList[i] ) == 0)
-                    {
-                        Cursor.cursorPosY = i;
-                    }
-                }
+                GetPreviousCursorPosition();
                 DisplayFiles.currentPath = Directory.GetParent( DisplayFiles.currentPath ).ToString();
                 DisplayFiles.Display();
             }
 
         }
+
+        private void GetPreviousCursorPosition()
+        {
+            parentDirectory = Directory.GetParent( DisplayFiles.currentPath ).ToString();
+            currentFileList = CombineArrays( parentDirectory ) ;
+            for (int i = 0; i < currentFileList.Length; i++)
+            {
+                if (string.Compare( DisplayFiles.currentPath, currentFileList[i] ) == 0)
+                {
+                    Cursor.cursorPosY = i;
+                }
+            }
+        }
+
+        public static string[] CombineArrays(string path)
+        {
+            string[] directories = Directory.GetDirectories( path );
+            string[] files = Directory.GetFiles( path );
+            string[] combinedDirectory = new string[directories.Length + files.Length];
+            Array.Copy( directories, combinedDirectory, directories.Length );
+            Array.Copy( files, 0, combinedDirectory, directories.Length, files.Length );
+            return combinedDirectory;
+        }
+
     }
 }

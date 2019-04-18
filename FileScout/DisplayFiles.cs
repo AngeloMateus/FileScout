@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Runtime.InteropServices;
-using System.Security.Permissions;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace FileScout
 {
@@ -21,14 +15,19 @@ namespace FileScout
             StreamWriter writer = new StreamWriter( Console.OpenStandardOutput() );
             try
             {
+                files = CombineArrays();
                 Console.Clear();
-                files = Directory.GetFileSystemEntries( currentPath );
+
                 Console.CursorVisible = false;
 
-                Array.Sort( files );
 
                 //Write to Console
-                writer.Write( currentPath + "\n\n" );
+                writer.Write("   "+ currentPath +"\n   ");
+                for (int i = 0; i < currentPath.Length; i++)
+                {
+                    writer.Write("_");
+                }
+                writer.Write("\n\n");
 
                 for (int i = 0; i < files.Length; i++)
                 {
@@ -80,6 +79,15 @@ namespace FileScout
                 currentPath = Directory.GetParent( currentPath ).ToString();
                 Display();
             }
+        }
+        public static string[] CombineArrays()
+        {
+            string[] directories = Directory.GetDirectories( currentPath );
+            string[] files = Directory.GetFiles( currentPath );
+            string[] combinedDirectory = new string[directories.Length + files.Length];
+            Array.Copy( directories, combinedDirectory, directories.Length );
+            Array.Copy(files, 0,combinedDirectory,directories.Length,files.Length);
+            return combinedDirectory;
         }
     }
 }
