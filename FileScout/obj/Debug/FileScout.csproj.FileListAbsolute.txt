@@ -5,5 +5,3 @@ C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.csprojAssemb
 C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.csproj.CoreCompileInputs.cache
 C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.exe
 C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.pdb
-C:\Users\angel\source\repos\FileScout\FileScout\bin\Debug\CursesSharp.dll
-C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.csproj.CopyComplete

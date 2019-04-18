@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Permissions;
 using System.Text;
 using System.Threading;
@@ -17,50 +18,68 @@ namespace FileScout
         //Display Current Dir files and folders and selected file
         public static void Display()
         {
-            files = Directory.GetFileSystemEntries( currentPath );
-            Console.CursorVisible = false;
-
-            Array.Sort( files );
-
-            Console.Clear();
-            //Write to Console
-
-            Console.WriteLine( currentPath );
-
-            for (int i = 0; i < files.Length; i++)
+            StreamWriter writer = new StreamWriter( Console.OpenStandardOutput() );
+            try
             {
-                if (Cursor.cursorPosY == i)
+                Console.Clear();
+                files = Directory.GetFileSystemEntries( currentPath );
+                Console.CursorVisible = false;
+
+                Array.Sort( files );
+
+                //Write to Console
+                writer.Write( currentPath + "\n\n" );
+
+                for (int i = 0; i < files.Length; i++)
                 {
-                    FileAttributes attr = File.GetAttributes( files[i] );
-                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    if (Cursor.cursorPosY == i)
                     {
-                        Console.BackgroundColor = ConsoleColor.Blue;
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine( Path.GetFileName( files[i] ) + "\\" );
-                        Console.ResetColor();
+                        FileAttributes attr = File.GetAttributes( files[i] );
+                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                        {
+                            writer.WriteLine( "-> " + Path.GetFileName( files[i] ) + "\\" );
+                        }
+                        else
+                        {
+                            writer.WriteLine( "-> " + Path.GetFileName( files[i] ) );
+                        }
                     }
-                    else
+                    else if (Cursor.cursorPosY != i)
                     {
-                        Console.BackgroundColor = ConsoleColor.Blue;
-                        Console.ForegroundColor = ConsoleColor.White;
-                        Console.WriteLine( Path.GetFileName( files[i] ) );
-                        Console.ResetColor();
+                        FileAttributes attr = File.GetAttributes( files[i] );
+                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                        {
+                            writer.WriteLine( "   "+Path.GetFileName( files[i] ) + "\\" );
+
+                        }
+                        else
+                        {
+                            writer.WriteLine( "   "+Path.GetFileName( files[i] ) );
+
+                        }
                     }
                 }
-                else if(Cursor.cursorPosY != i)
-                {
-                    FileAttributes attr = File.GetAttributes( files[i] );
-                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-                    {
-                        Console.WriteLine( Path.GetFileName(files[i]) + "\\" );
-                    }
-                    else
-                    {
-                        Console.WriteLine( Path.GetFileName( files[i] ) );
-                    }
-                }
+                writer.Flush();
+
+                Console.SetCursorPosition( 0, Cursor.cursorPosY );
             }
-            Console.SetCursorPosition(0,0);
+            catch(UnauthorizedAccessException)
+            {
+                Console.Clear();
+                Console.WriteLine( "Access Denied" );
+                Thread.Sleep( 300 );
+                string parentDirectory = Directory.GetParent( currentPath ).ToString();
+                string[] currentFileList = Directory.GetFileSystemEntries( parentDirectory );
+                for (int i = 0; i < currentFileList.Length; i++)
+                {
+                    if (string.Compare( currentPath, currentFileList[i] ) == 0)
+                    {
+                        Cursor.cursorPosY = i;
+                    }
+                }
+                currentPath = Directory.GetParent( currentPath ).ToString();
+                Display();
+            }
         }
     }
 }
