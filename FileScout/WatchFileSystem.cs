@@ -15,9 +15,7 @@ namespace FileScout
         {
             FileSystemWatcher watcher = new FileSystemWatcher();
 
-
-
-            watcher.Path = DisplayFiles.currentPath;
+            watcher.Path = ConsoleDisplay.currentPath;
             watcher.NotifyFilter = NotifyFilters.LastAccess
                      | NotifyFilters.LastWrite
                      | NotifyFilters.FileName
@@ -35,7 +33,7 @@ namespace FileScout
 
         private static void WatcherChanged( object sender, FileSystemEventArgs e )
         {
-            DisplayFiles.Display();
+            ConsoleDisplay.Display();
         }
 
     }
