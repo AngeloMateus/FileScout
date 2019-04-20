@@ -9,7 +9,6 @@ namespace FileScout
         {
             new WatchFileSystem();
             ConsoleDisplay.Display();
-            Console.SetBufferSize(Console.WindowWidth,Console.WindowWidth);
             Console.Title = "File Scout";
 
             Input readInput = new Input();
