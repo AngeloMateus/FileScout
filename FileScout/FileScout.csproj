@@ -45,6 +45,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlphaNumComparer.cs" />
     <Compile Include="Cursor.cs" />
     <Compile Include="ConsoleDisplay.cs" />
     <Compile Include="History.cs" />
