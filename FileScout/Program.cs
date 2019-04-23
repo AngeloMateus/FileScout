@@ -8,13 +8,13 @@ namespace FileScout
     {
         static void Main( string[] args )
         {
-            new WatchFileSystem();
-            ConsoleDisplay.Display();
             Console.Title = "File Scout";
 
             Input readInput = new Input();
             Thread readInputThread = new Thread( new ThreadStart( readInput.StartReading ) );
+            ConsoleDisplay.Display();
             readInputThread.Start();
+            new WatchFileSystem();
         }
     }
 }
