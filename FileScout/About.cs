@@ -15,7 +15,6 @@ namespace FileScout
             string intro = "FileScout version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
             List<string> todo = new List<string>();
 
-            todo.Add( "Format file sizes with Kb Mb Gb Tb" );
             todo.Add( "Format Current path to display a maximum length" );
             todo.Add( "Always display current path on top of window" );
             todo.Add( "Open new cmd without starting new window" );

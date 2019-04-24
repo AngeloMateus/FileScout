@@ -51,11 +51,12 @@ namespace FileScout
                         FileAttributes attr = File.GetAttributes( files[i] );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            writer.WriteLine( " -> > " + ShortenLength( Path.GetFileNameWithoutExtension( files[i] ), 28 ) + Path.GetExtension( files[i] ) + "\\" );
+                            writer.WriteLine( " -> > " + ShortenLength( Path.GetFileNameWithoutExtension( files[i] ), 26 ) + Path.GetExtension( files[i] ) + "\\" );
                         }
                         else
                         {
-                            writer.WriteLine( " -> {0,-40}{1,16}", ShortenLength( Path.GetFileNameWithoutExtension( files[i] ), 28 ) + Path.GetExtension( files[i] ), new FileInfo( files[i] ).Length / 1000 + " Kb" );
+                            writer.WriteLine( " -> {0,-40}{1,16}", ShortenLength( Path.GetFileNameWithoutExtension( files[i] ), 26 )
+                                + Path.GetExtension( files[i] ), CalculateFileSize( files[i] ) );
                         }
                     }
                     else if (Cursor.cursorPosY != i)
@@ -63,12 +64,13 @@ namespace FileScout
                         FileAttributes attr = File.GetAttributes( files[i] );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            writer.WriteLine( "    > " + ShortenLength( Path.GetFileNameWithoutExtension( files[i] ), 28 ) + Path.GetExtension( files[i] ) + "\\" );
+                            writer.WriteLine( "    > " + ShortenLength( Path.GetFileNameWithoutExtension( files[i] ), 26 ) + Path.GetExtension( files[i] ) + "\\" );
 
                         }
                         else
                         {
-                            writer.WriteLine( "    {0,-40}{1,16}", ShortenLength( Path.GetFileNameWithoutExtension( files[i] ), 28 ) + Path.GetExtension( files[i] ), new FileInfo( files[i] ).Length / 1000 + " Kb" );
+                            writer.WriteLine( "    {0,-40}{1,16}", ShortenLength( Path.GetFileNameWithoutExtension( files[i] ), 26 )
+                                + Path.GetExtension( files[i] ), CalculateFileSize( files[i] ) );
                         }
                     }
                 }
@@ -180,7 +182,7 @@ namespace FileScout
                 writer.WriteLine( " -> " + ShortenLength( Path.GetFileName( files[Cursor.cursorPosY] ), 28 ) );
             }
             writer.Flush();
-            Console.SetCursorPosition(0,Cursor.cursorPosY);
+            Console.SetCursorPosition( 0, Cursor.cursorPosY );
         }
 
         private static string ShortenLength( string path, int maxLength )
@@ -189,6 +191,24 @@ namespace FileScout
                 return path.Substring( 0, maxLength ) + "~";
             else
                 return path;
+        }
+
+        private static string CalculateFileSize( string file )
+        {
+            string[] sizeSuffixes = { " bytes", " KB", " MB", " GB", " TB", " PB", " EB" };
+            double fileSize = (double)new FileInfo( file ).Length;
+
+            //byte=0, Kb=1, Mb=2 ...
+            int magnitude = (int)Math.Log( fileSize, 1000 );
+
+            decimal adjustedSize = (decimal)fileSize / (1L << (magnitude * 10));
+
+            if (magnitude < 0)
+            {
+                magnitude = 0;
+            }
+
+            return string.Format("{0,0}{1,-8}",Math.Round(adjustedSize, 2) , sizeSuffixes[magnitude]);
         }
     }
 }
