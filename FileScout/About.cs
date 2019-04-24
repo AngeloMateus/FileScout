@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,7 +12,7 @@ namespace FileScout
     {
         public About()
         {
-            string intro = "FileScout version " + System.Reflection.Assembly.GetExecutingAssembly().GetName().Version;
+            string intro = "FileScout version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
             List<string> todo = new List<string>();
 
             todo.Add( "Format file sizes with Kb Mb Gb Tb" );

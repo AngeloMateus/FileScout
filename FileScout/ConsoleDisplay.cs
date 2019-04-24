@@ -17,7 +17,6 @@ namespace FileScout
         private static string parentDirectory;
         private static StreamWriter writer;
         private static readonly int topPadding = 5;
-        private static string path;
 
         static ConsoleDisplay()
         {
@@ -181,6 +180,7 @@ namespace FileScout
                 writer.WriteLine( " -> " + ShortenLength( Path.GetFileName( files[Cursor.cursorPosY] ), 28 ) );
             }
             writer.Flush();
+            Console.SetCursorPosition(0,Cursor.cursorPosY);
         }
 
         private static string ShortenLength( string path, int maxLength )

@@ -8,9 +8,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle( "FileScout" )]
 [assembly: AssemblyDescription( "" )]
 [assembly: AssemblyConfiguration( "" )]
-[assembly: AssemblyCompany( "HP Inc." )]
+[assembly: AssemblyCompany( "AngeloMateus" )]
 [assembly: AssemblyProduct( "FileScout" )]
-[assembly: AssemblyCopyright( "Copyright © HP Inc. 2019" )]
+[assembly: AssemblyCopyright( "" )]
 [assembly: AssemblyTrademark( "" )]
 [assembly: AssemblyCulture( "" )]
 
@@ -34,3 +34,4 @@ using System.Runtime.InteropServices;
 // [assembly: AssemblyVersion("1.0.*")]
 [assembly: AssemblyVersion( "0.0.1.5" )]
 [assembly: AssemblyFileVersion( "0.0.0.1" )]
+[assembly: AssemblyInformationalVersion("0.1.19114")]
