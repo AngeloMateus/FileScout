@@ -1,7 +1,0 @@
-C:\Users\angel\source\repos\FileScout\FileScout\bin\Debug\FileScout.exe.config
-C:\Users\angel\source\repos\FileScout\FileScout\bin\Debug\FileScout.exe
-C:\Users\angel\source\repos\FileScout\FileScout\bin\Debug\FileScout.pdb
-C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.csprojAssemblyReference.cache
-C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.csproj.CoreCompileInputs.cache
-C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.exe
-C:\Users\angel\source\repos\FileScout\FileScout\obj\Debug\FileScout.pdb
