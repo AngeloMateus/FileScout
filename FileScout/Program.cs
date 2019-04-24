@@ -9,7 +9,6 @@ namespace FileScout
         static void Main( string[] args )
         {
             Console.Title = "File Scout";
-
             Input readInput = new Input();
             Thread readInputThread = new Thread( new ThreadStart( readInput.StartReading ) );
             ConsoleDisplay.Display();
