@@ -98,10 +98,9 @@ namespace FileScout
                         }
                         break;
                 }
-                Thread.Sleep( 4 );
             }
 
-            while (consoleKeyInfo.Key != ConsoleKey.Escape && consoleKeyInfo.Key != ConsoleKey.Q);
+            while (consoleKeyInfo.Key != ConsoleKey.Escape);
             Console.Clear();
         }
 

@@ -12,15 +12,18 @@ namespace FileScout
     {
         public About()
         {
-            string intro = "FileScout version " + FileVersionInfo.GetVersionInfo(Assembly.GetExecutingAssembly().Location).ProductVersion;
+            string intro = "FileScout version " + FileVersionInfo.GetVersionInfo( Assembly.GetExecutingAssembly().Location ).ProductVersion;
             List<string> todo = new List<string>();
 
             todo.Add( "Format Current path to display a maximum length" );
-            todo.Add( "Always display current path on top of window" );
+            todo.Add( "Make TAB an assignable button" );
+            todo.Add( "Fix flickering path when scrolling long directories" );
             todo.Add( "Open new cmd without starting new window" );
             todo.Add( "Search path or files by regex" );
             todo.Add( "Search within directory by keypress" );
             todo.Add( "Hide/Show hidden files" );
+            todo.Add( "Rename/Delete/Cut/Copy" );
+            todo.Add( "Sort files by size" );
 
             Console.SetCursorPosition( (Console.WindowWidth - intro.Length) / 2, 4 );
             Console.WriteLine( intro + "\n" );
@@ -36,7 +39,7 @@ namespace FileScout
             foreach (string li in todo)
             {
                 Console.CursorLeft = (Console.WindowWidth - li.Length) / 2;
-                Console.WriteLine( li  );
+                Console.WriteLine( li );
             }
 
             Console.CursorTop = 0;

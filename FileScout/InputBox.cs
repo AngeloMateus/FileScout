@@ -19,7 +19,7 @@ namespace FileScout
             var command = Console.ReadLine();
 
             //Add all commands to an array if command isnt found display "Command Not Found"
-            string[] commands = new string[] { "exit", "quit", "q", "cmd", "prompt", "command prompt", "powershell", "pwr", "explore", "explorer", "start", "about", "v", "version"};
+            string[] commands = new string[] { "quit", "q", "cmd", "command prompt", "powershell", "pwr", "explorer", "x", "v", "version"};
 
             bool commandExists = true;
 
@@ -49,7 +49,6 @@ namespace FileScout
             {
                 case "":
                     break;
-                case "exit":
                 case "quit":
                 case "q":
                     {
@@ -58,7 +57,6 @@ namespace FileScout
                     }
                     break;
                 case "cmd":
-                case "prompt":
                 case "command prompt":
                     {
                         Console.Clear();
@@ -82,16 +80,14 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
-                case "explore":
                 case "explorer":
-                case "start":
+                case "x":
                     {
                         Console.Clear();
                         Process.Start( @ConsoleDisplay.currentPath );
                         ConsoleDisplay.Display();
                     }
                     break;
-                case "about":
                 case "v":
                 case "version":
                     {
