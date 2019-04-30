@@ -1,7 +1,7 @@
 # FileScout
 ## A terminal based file and directory explorer for windows
 
-Type fs to run. Press enter to input commands. Browse with arrow keys or `h` `j` `k` `l`
+Press enter to input commands. Navigate with arrow keys or `h` `j` `k` `l`
 <br><br>
 
 #### Available commands:
