@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace FileScout
@@ -7,7 +8,7 @@ namespace FileScout
     class InputBox
     {
 
-        public InputBox()
+        public void CommadMode()
         {
             ConsoleDisplay.ClearLine( Console.WindowTop );
             Console.SetCursorPosition( 0, Console.WindowTop );
@@ -19,7 +20,7 @@ namespace FileScout
             var command = Console.ReadLine();
 
             //Add all commands to an array if command isnt found display "Command Not Found"
-            string[] commands = new string[] { "quit", "q", "cmd", "command prompt", "powershell", "pwr", "explorer", "x", "v", "version"};
+            string[] commands = new string[] { "quit", "q", "cmd", "command prompt", "powershell", "pwr", "explorer", "x", "v", "version" };
 
             bool commandExists = true;
 
@@ -98,6 +99,32 @@ namespace FileScout
                     break;
             }
             ConsoleDisplay.ClearLine( Console.WindowTop );
+        }
+
+        public void SearchMode()
+        {
+            ConsoleDisplay.ClearLine( Console.WindowTop );
+            Console.SetCursorPosition( 0, Console.WindowTop );
+
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write( ":/" );
+            Console.ResetColor();
+
+            string pattern = Console.ReadLine();
+
+
+            for (int i = 0; i < ConsoleDisplay.files.Length; i++)
+            {
+                if (pattern.Length > 0 && ConsoleDisplay.files[i].ToLower().Contains( pattern.ToLower() ))
+                {
+                    Cursor.cursorPosY = i;
+                    break;
+                }
+            }
+
+
+            Console.Clear();
+            ConsoleDisplay.Display();
         }
     }
 }

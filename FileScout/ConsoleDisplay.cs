@@ -11,7 +11,7 @@ namespace FileScout
 
     class ConsoleDisplay
     {
-        public static string currentPath = Directory.GetCurrentDirectory();
+        public static string currentPath;
         public static string[] files;
         private static string[] currentFileList;
         private static string parentDirectory;
@@ -20,12 +20,13 @@ namespace FileScout
 
         static ConsoleDisplay()
         {
+            currentPath = Directory.GetCurrentDirectory();
             writer = new StreamWriter( Console.OpenStandardOutput() );
             writer.AutoFlush = false;
         }
 
 
-        //Display Current Dir files and folders and selected file
+        //Display Current Directory, files and folders and selected file
         public static void Display()
         {
             Console.Clear();
@@ -35,8 +36,6 @@ namespace FileScout
             {
                 //Sort and combine Direcotries and files
                 files = CombineArrays( currentPath );
-
-                //Output the Current Path
 
                 Console.SetCursorPosition( 0, Console.WindowTop + 5 );
                 //Output all files and folders
@@ -83,13 +82,14 @@ namespace FileScout
                 Display();
             }
             writer.Flush();
-
             Console.SetCursorPosition( 0, Cursor.cursorPosY );
 
+            //Clear top of window and Write Current Directory
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
         }
+
 
         private static void SetCursorToPreviousPosition()
         {
@@ -109,7 +109,7 @@ namespace FileScout
             string[] directories = Directory.GetDirectories( path );
             string[] files = Directory.GetFiles( path );
 
-            //Array.Sort( files, new AlphaNumComparer() );
+            Array.Sort( files, new AlphaNumComparer() );
             Array.Sort( directories, new AlphaNumComparer() );
 
             string[] combinedDirectory = new string[directories.Length + files.Length];
@@ -216,14 +216,20 @@ namespace FileScout
                 magnitude = 0;
             }
 
-            return string.Format( "{0,0}{1,-8}", Math.Round( adjustedSize, 2 ), sizeSuffixes[magnitude] );
+            return string.Format( "{0,0}{1,-8}", Math.Round( adjustedSize, 0 ), sizeSuffixes[magnitude] );
         }
+
         private static void WriteCurrentPath()
         {
             string shortenedPath = ShortenPath( currentPath );
-            writer.Write( "\n\n   " + shortenedPath + "\n   " );
 
-            for (int i = 0; i < shortenedPath.Length ; i++)
+            if (Console.WindowTop != 0)
+                writer.Write( "\n\n" + Console.WindowTop + "  " + shortenedPath + "\n   " );
+            else
+                writer.Write( "\n\n   " + shortenedPath + "\n   " );
+
+
+            for (int i = 0; i < shortenedPath.Length; i++)
             {
                 writer.Write( " " );
             }
@@ -243,11 +249,11 @@ namespace FileScout
         {
             if (path.Length > 45)
             {
-                path = path.Substring(0,3) +"..."+path.Substring(path.Length - 45);
+                path = path.Substring( 0, 3 ) + "..." + path.Substring( path.Length - 45 );
                 return path;
             }
             else
-            return path;
+                return path;
         }
 
     }

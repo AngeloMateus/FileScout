@@ -15,7 +15,7 @@ namespace FileScout
             string intro = "FileScout version " + FileVersionInfo.GetVersionInfo( Assembly.GetExecutingAssembly().Location ).ProductVersion;
             List<string> todo = new List<string>();
 
-            todo.Add( "Format Current path to display a maximum length" );
+            todo.Add( "Format current path to display in between \"...\\\"" );
             todo.Add( "Make TAB an assignable button" );
             todo.Add( "Fix flickering path when scrolling long directories" );
             todo.Add( "Open new cmd without starting new window" );
@@ -26,6 +26,7 @@ namespace FileScout
             todo.Add( "Rename/Delete/Cut/Copy" );
             todo.Add( "Sort files by size" );
             todo.Add( "Startup Arguments to start FileScout in a specific directory" );
+            todo.Add( "Return the console window to previous position if directory has been visited" );
 
             Console.WriteLine( new string( '*', Console.WindowWidth ) );
             Console.SetCursorPosition( (Console.WindowWidth - intro.Length) / 2, 4 );

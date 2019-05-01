@@ -94,7 +94,12 @@ namespace FileScout
                         break;
                     case ConsoleKey.Enter:
                         {
-                            InputBox inputBox = new InputBox();
+                            new InputBox().CommadMode();
+                        }
+                        break;
+                    case ConsoleKey.F:
+                        {
+                            new InputBox().SearchMode();
                         }
                         break;
                 }
