@@ -32,26 +32,23 @@ namespace FileScout
 
                 //Read key to change cursor
                 consoleKeyInfo = Console.ReadKey( true );
-                switch (consoleKeyInfo.Key)
+                switch (consoleKeyInfo.KeyChar)
                 {
-                    case ConsoleKey.UpArrow:
-                    case ConsoleKey.K:
+                    case 'k':
                         if (Cursor.cursorPosY > 0)
                         {
                             Cursor.cursorPosY--;
                             ConsoleDisplay.MoveUp();
                         }
                         break;
-                    case ConsoleKey.DownArrow:
-                    case ConsoleKey.J:
+                    case 'j':
                         if (Cursor.cursorPosY < ConsoleDisplay.files.Length - 1)
                         {
                             Cursor.cursorPosY++;
                             ConsoleDisplay.MoveDown();
                         }
                         break;
-                    case ConsoleKey.RightArrow:
-                    case ConsoleKey.L:
+                    case 'l':
                         {
                             //If it it's a folder allow press right key
                             FileAttributes attr = File.GetAttributes( selectedFile );
@@ -64,8 +61,7 @@ namespace FileScout
                             }
                         }
                         break;
-                    case ConsoleKey.LeftArrow:
-                    case ConsoleKey.H:
+                    case 'h':
                         {
                             History.AddEntry();
 
@@ -78,7 +74,7 @@ namespace FileScout
                             ConsoleDisplay.Display();
                         }
                         break;
-                    case ConsoleKey.Tab:
+                    case 't':
                         {
                             Console.Clear();
                             Process process = new Process();
@@ -92,14 +88,25 @@ namespace FileScout
                             ConsoleDisplay.Display();
                         }
                         break;
-                    case ConsoleKey.Enter:
+                    case ':':
                         {
                             new InputBox().CommadMode();
                         }
                         break;
-                    case ConsoleKey.F:
+                    case '/':
                         {
                             new InputBox().SearchMode();
+                        }
+                        break;
+                    case '.':
+                        {
+                            new InputBox().JumpToLetter();
+                        }
+                        break;
+                    case '\r':
+                        {
+                            System.Diagnostics.Process.Start(selectedFile);
+                            ConsoleDisplay.Display();
                         }
                         break;
                 }

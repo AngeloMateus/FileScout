@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
 
@@ -115,7 +116,7 @@ namespace FileScout
 
             for (int i = 0; i < ConsoleDisplay.files.Length; i++)
             {
-                if (pattern.Length > 0 && ConsoleDisplay.files[i].ToLower().Contains( pattern.ToLower() ))
+                if (Path.GetFileName(ConsoleDisplay.files[i]).ToLower().Contains( pattern.ToLower() ))
                 {
                     Cursor.cursorPosY = i;
                     break;
@@ -123,6 +124,30 @@ namespace FileScout
             }
 
 
+            Console.Clear();
+            ConsoleDisplay.Display();
+        }
+
+        public void JumpToLetter()
+        {
+            ConsoleDisplay.ClearLine( Console.WindowTop );
+            Console.SetCursorPosition( 0, Console.WindowTop );
+
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write( ":." );
+            Console.ResetColor();
+
+            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            string key = keyInfo.KeyChar.ToString();
+
+            for (int i = 0; i < ConsoleDisplay.files.Length; i++)
+            {
+                if (Path.GetFileName( ConsoleDisplay.files[i]).StartsWith( key, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    Cursor.cursorPosY = i;
+                    break;
+                }
+            }
             Console.Clear();
             ConsoleDisplay.Display();
         }

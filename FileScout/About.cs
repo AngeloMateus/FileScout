@@ -16,6 +16,8 @@ namespace FileScout
             List<string> todo = new List<string>();
 
             todo.Add( "Format current path to display in between \"...\\\"" );
+            todo.Add( "Fix cycling through letter search \".\"" );
+            todo.Add("Make SearchMode button a forwardslash \"/\"");
             todo.Add( "Make TAB an assignable button" );
             todo.Add( "Fix flickering path when scrolling long directories" );
             todo.Add( "Open new cmd without starting new window" );
