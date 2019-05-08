@@ -30,6 +30,7 @@ namespace FileScout
                 if (directoryArray.Length != 0)
                     selectedFile = directoryArray[Cursor.cursorPosY];
 
+
                 //Read key to change cursor
                 consoleKeyInfo = Console.ReadKey( true );
                 switch (consoleKeyInfo.KeyChar)
@@ -105,7 +106,8 @@ namespace FileScout
                         break;
                     case '\r':
                         {
-                            System.Diagnostics.Process.Start(selectedFile);
+                            System.Diagnostics.Process.Start(@selectedFile);
+                            Console.Clear();
                             ConsoleDisplay.Display();
                         }
                         break;
@@ -136,6 +138,8 @@ namespace FileScout
             string[] directories = Directory.GetDirectories( path );
             string[] files = Directory.GetFiles( path );
 
+            Array.Sort( files, new AlphaNumComparer() );
+            Array.Sort( directories, new AlphaNumComparer() );
 
             string[] combinedDirectory = new string[directories.Length + files.Length];
             Array.Copy( directories, combinedDirectory, directories.Length );

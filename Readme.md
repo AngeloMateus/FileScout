@@ -1,7 +1,7 @@
 # FileScout
 ## A terminal based file and directory explorer for windows
 
-Press enter to input commands. Navigate with arrow keys or `h` `j` `k` `l`
+Type `:` to input commands. Navigate with arrow keys or `h` `j` `k` `l`
 <br><br>
 
 #### Available commands:
@@ -10,12 +10,21 @@ Press enter to input commands. Navigate with arrow keys or `h` `j` `k` `l`
 
 `powershell` | `pwr` - starts powershell (non-admin) in the current directory
 
-`explorer` | `x` - opens Windows File Explorer in the current directory
+`explore` | `x` - opens Windows File Explorer in the current directory
 
 `version` | `v` - displays version and TODO list
 
 `quit` | `q` - exits FileScout
 
-#### Assignable Buttons
+#### Searching 
 
-TAB by default opens a new cmd window.
+`/` search within directory.
+
+`.` jump to file or folder beginning with typed letter.
+
+<br>
+#### Other Buttons
+
+`TAB` by default opens a new cmd window.
+
+`ENTER` Opens the file with the recomended application.

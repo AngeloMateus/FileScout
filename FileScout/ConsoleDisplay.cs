@@ -30,11 +30,11 @@ namespace FileScout
         public static void Display()
         {
             Console.Clear();
-
+            Console.SetCursorPosition( 0, 0 );
             Console.CursorVisible = false;
             try
             {
-                //Sort and combine Direcotries and files
+                //Sort and combine Directories and files
                 files = CombineArrays( currentPath );
 
                 Console.SetCursorPosition( 0, Console.WindowTop + 5 );
@@ -247,15 +247,18 @@ namespace FileScout
 
         private static string ShortenPath( string path )
         {
+            string drive = Path.GetPathRoot( path );
             if (path.Length > 45)
             {
-                path = path.Substring( 0, 3 ) + "..." + path.Substring( path.Length - 45 );
+                path = path.Substring(path.Length - 45);
+                int index = path.IndexOf( Path.DirectorySeparatorChar );
+                path = path.Substring(  index );
+                path = drive + "..." + path;
+
                 return path;
             }
             else
                 return path;
         }
-
     }
 }
-

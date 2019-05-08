@@ -1,22 +1,23 @@
 using System;
 using System.Diagnostics;
+using System.Security.Permissions;
 using System.Threading;
 
 namespace FileScout
 {
     class Program
     {
-        static void Main( string[] args )
+        static void Main( )
         {
             Console.Title = "File Scout";
-
+            IntPtr handle = Process.GetCurrentProcess().MainWindowHandle;
+            handle.ToInt64();
             //Reads user input on it's own thread
             Input readInput = new Input();
             Thread readInputThread = new Thread( new ThreadStart( readInput.StartReading ) );
 
             //Handles console display, directory sorting, path shortening, etc.
             ConsoleDisplay.Display();
-
             readInputThread.Start();
 
             //Watches for changes in filesystem and calls Display() when changes occur.

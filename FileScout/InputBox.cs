@@ -82,7 +82,7 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
-                case "explorer":
+                case "explore":
                 case "x":
                     {
                         Console.Clear();
