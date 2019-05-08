@@ -21,7 +21,7 @@ namespace FileScout
             var command = Console.ReadLine();
 
             //Add all commands to an array if command isnt found display "Command Not Found"
-            string[] commands = new string[] { "quit", "q", "cmd", "command prompt", "powershell", "pwr", "explorer", "x", "v", "version" };
+            string[] commands = new string[] { "quit", "q", "cmd", "command prompt", "powershell", "pwr", "explore", "x", "v", "version" };
 
             bool commandExists = true;
 
