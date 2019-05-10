@@ -1,10 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FileScout
 {
@@ -15,6 +12,7 @@ namespace FileScout
             string intro = "FileScout version " + FileVersionInfo.GetVersionInfo( Assembly.GetExecutingAssembly().Location ).ProductVersion;
             List<string> todo = new List<string>();
 
+            todo.Add( "Add TAB auto-complete for : commands" );
             todo.Add( "Make TAB an assignable button" );
             todo.Add( "Fix flickering path when scrolling long directories" );
             todo.Add( "Open new cmd without starting new window" );
@@ -26,7 +24,7 @@ namespace FileScout
             todo.Add( "Sort files by size" );
             todo.Add( "Startup Arguments to start FileScout in a specific directory" );
             todo.Add( "Return the console window to previous position if directory has been visited" );
-            todo.Add("Create :help window to remind myslef of the commands");
+            todo.Add( "Create :help window to remind myslef of the commands" );
 
             Console.WriteLine( new string( '*', Console.WindowWidth ) );
             Console.SetCursorPosition( (Console.WindowWidth - intro.Length) / 2, 4 );

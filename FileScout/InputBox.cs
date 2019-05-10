@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.IO;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace FileScout
@@ -98,6 +97,7 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
+                    
             }
             ConsoleDisplay.ClearLine( Console.WindowTop );
         }
@@ -150,6 +150,45 @@ namespace FileScout
             }
             Console.Clear();
             ConsoleDisplay.Display();
+        }
+
+        public void RenameFile(string file)
+        {
+            string oldFile = file;
+            ConsoleDisplay.ClearLine( Console.WindowTop );
+            Console.SetCursorPosition( 0, Console.WindowTop );
+            Console.Write("RENAME to: ");
+            string line = Console.ReadLine();
+
+            try
+            {
+                //Check if the file is a directory or not for File.Move() or Directory.Move()
+                FileAttributes attr = File.GetAttributes( file );
+                if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
+                {
+                    File.Move( file, ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + line );
+                }
+                else if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    Directory.Move( file, ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + line );
+                }
+            }
+            catch (Exception e)
+            {
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write("(!) " + e.Message );
+                Console.ResetColor();
+                Console.ReadKey(true);
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+            }
+
+            while (!oldFile.Equals( file ) )
+            {
+                Thread.Sleep( 100 );
+            }
         }
     }
 }

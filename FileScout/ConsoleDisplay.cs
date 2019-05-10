@@ -11,6 +11,7 @@ namespace FileScout
 
     class ConsoleDisplay
     {
+
         public static string currentPath;
         public static string[] files;
         private static string[] currentFileList;
@@ -32,10 +33,14 @@ namespace FileScout
             Console.Clear();
             Console.SetCursorPosition( 0, 0 );
             Console.CursorVisible = false;
+            
             try
             {
                 //Sort and combine Directories and files
                 files = CombineArrays( currentPath );
+
+                if(files.Length > Console.WindowHeight)
+                Console.SetBufferSize( Console.WindowWidth, files.Length + Console.WindowHeight );
 
                 Console.SetCursorPosition( 0, Console.WindowTop + 5 );
                 //Output all files and folders
@@ -81,6 +86,8 @@ namespace FileScout
                 currentPath = Directory.GetParent( currentPath ).ToString();
                 Display();
             }
+
+
             writer.Flush();
             Console.SetCursorPosition( 0, Cursor.cursorPosY );
 
@@ -88,6 +95,7 @@ namespace FileScout
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
+
         }
 
 

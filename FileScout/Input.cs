@@ -106,8 +106,29 @@ namespace FileScout
                         break;
                     case '\r':
                         {
-                            System.Diagnostics.Process.Start(@selectedFile);
-                            Console.Clear();
+                            try
+                            {
+                                ProcessStartInfo startInfo = new ProcessStartInfo();
+                                startInfo.FileName = @selectedFile;
+                                startInfo.RedirectStandardOutput = false;
+                                Process newProcess = Process.Start( startInfo );
+                            }
+                            catch (Exception e)
+                            {
+                                ConsoleDisplay.ClearLine( Console.WindowTop );
+                                Console.SetCursorPosition( 0, Console.WindowTop );
+                                Console.BackgroundColor = ConsoleColor.Red;
+                                Console.ForegroundColor = ConsoleColor.White;
+                                Console.Write( "(!) " + e.Message );
+                                Console.ResetColor();
+                                Console.ReadKey( true );
+                                ConsoleDisplay.Display(); ;
+                            }
+                        }
+                        break;
+                    case 'r':
+                        {
+                            new InputBox().RenameFile( selectedFile );
                             ConsoleDisplay.Display();
                         }
                         break;
