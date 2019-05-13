@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text.RegularExpressions;
-using System.Threading;
 
 namespace FileScout
 {
@@ -58,6 +54,7 @@ namespace FileScout
                             {
                                 ConsoleDisplay.currentPath = selectedFile;
                                 History.SetPointer();
+                                WatchFileSystem.RefreshWatcherPath();
                                 ConsoleDisplay.Display();
                             }
                         }
@@ -72,6 +69,7 @@ namespace FileScout
                                 SetCursorToPreviousPosition();
                                 ConsoleDisplay.currentPath = Directory.GetParent( ConsoleDisplay.currentPath ).ToString();
                             }
+                            WatchFileSystem.RefreshWatcherPath();
                             ConsoleDisplay.Display();
                         }
                         break;
@@ -129,7 +127,12 @@ namespace FileScout
                     case 'r':
                         {
                             new InputBox().RenameFile( selectedFile );
-                            ConsoleDisplay.Display();
+                            //ConsoleDisplay.Display();
+                        }
+                        break;
+                    case ' ':
+                        {
+                            Console.WriteLine( "Spacebar pressed" );
                         }
                         break;
                 }

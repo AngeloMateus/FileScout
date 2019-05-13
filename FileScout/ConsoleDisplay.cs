@@ -232,7 +232,7 @@ namespace FileScout
             string shortenedPath = ShortenPath( currentPath );
 
             if (Console.WindowTop != 0)
-                writer.Write( "\n\n" + Console.WindowTop + "  " + shortenedPath + "\n   " );
+                writer.Write( "\n\n ^ " + shortenedPath + "\n   " );
             else
                 writer.Write( "\n\n   " + shortenedPath + "\n   " );
 

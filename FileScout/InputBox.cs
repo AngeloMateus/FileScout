@@ -187,7 +187,7 @@ namespace FileScout
 
             while (!oldFile.Equals( file ) )
             {
-                Thread.Sleep( 100 );
+                Thread.Sleep( 50 );
             }
         }
     }

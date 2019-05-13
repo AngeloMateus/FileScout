@@ -1,20 +1,18 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Security.Permissions;
 
 namespace FileScout
 {
     class WatchFileSystem
     {
-        public WatchFileSystem()
-        {
-            CheckFiles();
-        }
+        private static FileSystemWatcher watcher;
         //Check for changes in the directory and redraw if changes were found
         [PermissionSet( SecurityAction.Demand, Name = "FullTrust" )]
-        private static void CheckFiles()
+        public void CheckFiles()
         {
-            FileSystemWatcher watcher = new FileSystemWatcher();
-
+            watcher = new FileSystemWatcher();
+            
             watcher.Path = ConsoleDisplay.currentPath;
             watcher.NotifyFilter = NotifyFilters.LastAccess
                      | NotifyFilters.LastWrite
@@ -29,9 +27,15 @@ namespace FileScout
             watcher.Renamed += new RenamedEventHandler( WatcherChanged );
 
             watcher.EnableRaisingEvents = true;
+
         }
 
-        private static void WatcherChanged( object sender, FileSystemEventArgs e )
+        public static void RefreshWatcherPath()
+        {
+            watcher.Path = ConsoleDisplay.currentPath;
+        }
+
+        private void WatcherChanged( object sender, FileSystemEventArgs e )
         {
             ConsoleDisplay.Display();
         }

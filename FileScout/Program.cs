@@ -18,8 +18,10 @@ namespace FileScout
             //Handles console display, directory sorting, path shortening, etc.
             ConsoleDisplay.Display();
             readInputThread.Start();
+
+
             //Watches for changes in filesystem and calls Display() when changes occur.
-            new WatchFileSystem();
+            new WatchFileSystem().CheckFiles();
         }
     }
 }

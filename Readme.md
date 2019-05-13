@@ -22,12 +22,12 @@ Type `:` to input commands. Navigate with arrow keys or `h` `j` `k` `l`
 
 `.` jump to file or folder beginning with typed letter.
 
-<br>
+
 #### File actions
 
 `r` rename the selected file
 
-<br>
+
 #### Other Buttons
 
 `TAB` by default opens a new cmd window.
