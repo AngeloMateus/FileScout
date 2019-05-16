@@ -51,7 +51,7 @@ namespace FileScout
                         FileAttributes attr = File.GetAttributes( files[i] );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 ) + Path.GetExtension( files[i] ) + "\\" );
+                            writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
                         }
                         else
                         {
@@ -64,7 +64,7 @@ namespace FileScout
                         FileAttributes attr = File.GetAttributes( files[i] );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            writer.WriteLine( "    > " + ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 ) + Path.GetExtension( files[i] ) + "\\" );
+                            writer.WriteLine( "    > " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) +"\\" );
 
                         }
                         else

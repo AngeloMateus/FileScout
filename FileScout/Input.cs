@@ -127,11 +127,11 @@ namespace FileScout
                     case 'r':
                         {
                             new InputBox().RenameFile( selectedFile );
-                            //ConsoleDisplay.Display();
                         }
                         break;
                     case ' ':
-                        {
+                        {   
+                            //TODO: implement Select multiple files/folder
                             Console.WriteLine( "Spacebar pressed" );
                         }
                         break;
