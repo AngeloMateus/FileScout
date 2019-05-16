@@ -54,7 +54,6 @@ namespace FileScout
                             {
                                 ConsoleDisplay.currentPath = selectedFile;
                                 History.SetPointer();
-                                WatchFileSystem.RefreshWatcherPath();
                                 ConsoleDisplay.Display();
                             }
                         }
@@ -69,7 +68,6 @@ namespace FileScout
                                 SetCursorToPreviousPosition();
                                 ConsoleDisplay.currentPath = Directory.GetParent( ConsoleDisplay.currentPath ).ToString();
                             }
-                            WatchFileSystem.RefreshWatcherPath();
                             ConsoleDisplay.Display();
                         }
                         break;

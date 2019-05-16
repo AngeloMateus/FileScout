@@ -24,7 +24,7 @@ namespace FileScout
             doList.Add("Sort files by size");
             doList.Add("Startup Arguments to start FileScout in a specific directory");
             doList.Add("Return the console window to previous position if directory has been visited");
-            doList.Add("Create :help window to remind myslef of the commands");
+            doList.Add("Create :help window to remind myself of the commands");
 
             Console.WriteLine(new string('*', Console.WindowWidth));
             Console.SetCursorPosition((Console.WindowWidth - intro.Length) / 2, 4);

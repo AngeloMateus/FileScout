@@ -32,7 +32,7 @@ namespace FileScout
 
         public static void RefreshWatcherPath()
         {
-            watcher.Path = ConsoleDisplay.currentPath;
+                watcher.Path = ConsoleDisplay.currentPath;
         }
 
         private void WatcherChanged( object sender, FileSystemEventArgs e )

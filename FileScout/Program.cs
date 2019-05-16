@@ -15,13 +15,14 @@ namespace FileScout
             Input readInput = new Input();
             Thread readInputThread = new Thread( new ThreadStart( readInput.StartReading ) );
 
+
+            //Watches for changes in filesystem and calls Display() when changes occur.
+            new WatchFileSystem().CheckFiles();
+
             //Handles console display, directory sorting, path shortening, etc.
             ConsoleDisplay.Display();
             readInputThread.Start();
 
-
-            //Watches for changes in filesystem and calls Display() when changes occur.
-            new WatchFileSystem().CheckFiles();
         }
     }
 }
