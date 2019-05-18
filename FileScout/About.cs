@@ -13,18 +13,18 @@ namespace FileScout
             List<string> doList = new List<string>();
 
             doList.Add("Add TAB auto-complete for : commands");
-            doList.Add("Make TAB an assignable button");
             doList.Add("Fix flickering path when scrolling long directories");
             doList.Add("Open new cmd without starting new window");
-            doList.Add("Search path or files by regex");
-            doList.Add("Search within directory by keypress");
+            doList.Add("Search entire file system WITH REGEX!");
             doList.Add("Hide/Show hidden files");
             doList.Add("File/Dir Selection via space");
-            doList.Add("Rename/Delete/Cut/Copy");
-            doList.Add("Sort files by size");
+            doList.Add("Rename/Delete/Cut/Copy/New");
+            doList.Add("Bulk Delete/Cut/Copy");
+            doList.Add("Option to Sort files by size");
             doList.Add("Startup Arguments to start FileScout in a specific directory");
-            doList.Add("Return the console window to previous position if directory has been visited");
             doList.Add("Create :help window to remind myself of the commands");
+            doList.Add("Folder Marks: ' to view all marks; m to mark a location with prompt to name location; ' + d to delete mark");
+            doList.Add("Color coding for Folder Marks");
 
             Console.WriteLine(new string('*', Console.WindowWidth));
             Console.SetCursorPosition((Console.WindowWidth - intro.Length) / 2, 4);

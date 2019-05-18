@@ -93,13 +93,13 @@ namespace FileScout
 
 
             writer.Flush();
-            //snew ConsoleDisplayChild();
             Console.SetCursorPosition( 0, Cursor.cursorPosY );
 
             //Clear top of window and Write Current Directory
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
+            new ConsoleDisplayChild();
         }
 
 
@@ -175,7 +175,7 @@ namespace FileScout
                 selectedFile = Path.GetFullPath( files[Cursor.cursorPosY] );
             }
             writer.Flush();
-            //new ConsoleDisplayChild();
+            new ConsoleDisplayChild();
 
             //Clear top of window and Write Current Directory
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
@@ -215,7 +215,8 @@ namespace FileScout
             }
             writer.Flush();
             Console.SetCursorPosition( 0, Cursor.cursorPosY );
-            //new ConsoleDisplayChild();
+            new ConsoleDisplayChild();
+
 
             //Clear top of window and Write Current Directory
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
@@ -251,7 +252,7 @@ namespace FileScout
                 writer.Write( "\n\n   " + shortenedPath+ Path.DirectorySeparatorChar + "\n   " );
 
 
-            for (int i = 0; i < shortenedPath.Length; i++)
+            for (int i = 0; i < shortenedPath.Length + 1; i++)
             {
                 writer.Write( "~" );
             }
