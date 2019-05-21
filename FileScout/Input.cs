@@ -29,6 +29,53 @@ namespace FileScout
 
                 //Read key to change cursor
                 consoleKeyInfo = Console.ReadKey( true );
+                switch (consoleKeyInfo.Key)
+                {
+                    case ConsoleKey.UpArrow:
+                        if (Cursor.cursorPosY > 0)
+                        {
+                            Cursor.cursorPosY--;
+                            ConsoleDisplay.MoveUp();
+                        }
+                        break;
+                    case ConsoleKey.DownArrow:
+                        if (Cursor.cursorPosY < ConsoleDisplay.files.Length - 1)
+                        {
+                            Cursor.cursorPosY++;
+                            ConsoleDisplay.MoveDown();
+                        }
+                        break;
+                    case ConsoleKey.RightArrow:
+                        {
+                            //If it it's a folder allow press right key
+                            FileAttributes attr = File.GetAttributes( selectedFile );
+
+                            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                            {
+                                ConsoleDisplay.currentPath = selectedFile;
+                                History.SetPointer();
+                                ConsoleDisplay.Display();
+                            }
+                            else
+                            {
+                                AttemptOpenFile();
+                            }
+                        }
+                        break;
+                    case ConsoleKey.LeftArrow:
+                        {
+                            History.AddEntry();
+
+                            //Set cursor to Parent folder
+                            if (Directory.GetParent( ConsoleDisplay.currentPath ) != null)
+                            {
+                                SetCursorToPreviousPosition();
+                                ConsoleDisplay.currentPath = Directory.GetParent( ConsoleDisplay.currentPath ).ToString();
+                            }
+                            ConsoleDisplay.Display();
+                        }
+                        break;
+                }
                 switch (consoleKeyInfo.KeyChar)
                 {
                     case 'k':
@@ -56,6 +103,10 @@ namespace FileScout
                                 History.SetPointer();
                                 ConsoleDisplay.Display();
                             }
+                            else
+                            {
+                                AttemptOpenFile();
+                            }
                         }
                         break;
                     case 'h':
@@ -71,7 +122,7 @@ namespace FileScout
                             ConsoleDisplay.Display();
                         }
                         break;
-                    case 't':
+                    case '\t':
                         {
                             Console.Clear();
                             Process process = new Process();
@@ -102,24 +153,7 @@ namespace FileScout
                         break;
                     case '\r':
                         {
-                            try
-                            {
-                                ProcessStartInfo startInfo = new ProcessStartInfo();
-                                startInfo.FileName = @selectedFile;
-                                startInfo.RedirectStandardOutput = false;
-                                Process newProcess = Process.Start( startInfo );
-                            }
-                            catch (Exception e)
-                            {
-                                ConsoleDisplay.ClearLine( Console.WindowTop );
-                                Console.SetCursorPosition( 0, Console.WindowTop );
-                                Console.BackgroundColor = ConsoleColor.Red;
-                                Console.ForegroundColor = ConsoleColor.White;
-                                Console.Write( "(!) " + e.Message );
-                                Console.ResetColor();
-                                Console.ReadKey( true );
-                                ConsoleDisplay.Display(); ;
-                            }
+                            AttemptOpenFile();
                         }
                         break;
                     case 'r':
@@ -128,9 +162,15 @@ namespace FileScout
                         }
                         break;
                     case ' ':
-                        {   
+                        {
                             //TODO: implement Select multiple files/folder
                             Console.WriteLine( "Spacebar pressed" );
+                        }
+                        break;
+                    case 'q':
+                        {
+                            Console.Clear();
+                            Environment.Exit( 0 );
                         }
                         break;
                 }
@@ -167,6 +207,28 @@ namespace FileScout
             Array.Copy( directories, combinedDirectory, directories.Length );
             Array.Copy( files, 0, combinedDirectory, directories.Length, files.Length );
             return combinedDirectory;
+        }
+
+        private void AttemptOpenFile()
+        {
+            try
+            {
+                ProcessStartInfo startInfo = new ProcessStartInfo();
+                startInfo.FileName = @selectedFile;
+                startInfo.RedirectStandardOutput = false;
+                Process newProcess = Process.Start( startInfo );
+            }
+            catch (Exception e)
+            {
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write( "(!) " + e.Message );
+                Console.ResetColor();
+                Console.ReadKey( true );
+                ConsoleDisplay.Display(); ;
+            }
         }
     }
 }

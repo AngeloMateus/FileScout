@@ -159,18 +159,21 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             Console.Write("RENAME to: ");
             string line = Console.ReadLine();
-
             try
             {
                 //Check if the file is a directory or not for File.Move() or Directory.Move()
                 FileAttributes attr = File.GetAttributes( file );
-                if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
+                if ((attr & FileAttributes.Directory) != FileAttributes.Directory && line != String.Empty)
                 {
                     File.Move( file, ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + line );
                 }
-                else if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                else if ((attr & FileAttributes.Directory) == FileAttributes.Directory && line != String.Empty)
                 {
                     Directory.Move( file, ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + line );
+                }
+                else
+                {
+                    ConsoleDisplay.Display();
                 }
             }
             catch (Exception e)
@@ -184,7 +187,7 @@ namespace FileScout
                 Console.ReadKey(true);
                 ConsoleDisplay.ClearLine( Console.WindowTop );
             }
-
+            
             while (!oldFile.Equals( file ) )
             {
                 Thread.Sleep( 50 );

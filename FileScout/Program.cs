@@ -9,7 +9,7 @@ namespace FileScout
     {
         static void Main( )
         {
-            Console.Title = "File Scout";
+            Console.Title = "FileScout";
             
             //Reads user input on it's own thread
             Input readInput = new Input();
