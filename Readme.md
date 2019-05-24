@@ -1,10 +1,17 @@
 # FileScout
 ## A terminal based file and directory explorer for windows
 
-Type `:` to input commands. Navigate with arrow keys or `h` `j` `k` `l`
-<br><br>
+#### - Navigation:
 
-#### Available commands:
+Use arrow keys or `h` `j` `k` `l`
+
+`t` - top of directory
+
+`b` - bottom of directory
+
+#### - Available commands:
+
+Type `:` to input commands.
 
 `command prompt` | `cmd` - starts windows command prompt in the current directory
 
@@ -16,19 +23,19 @@ Type `:` to input commands. Navigate with arrow keys or `h` `j` `k` `l`
 
 `quit` | `q` - exits FileScout
 
-#### Searching 
+#### - Searching 
 
 `/` search within directory.
 
 `.` jump to file or folder beginning with typed letter.
 
 
-#### File actions
+#### - File actions
 
-`r` rename the selected file
+`R` rename the selected file
 
 
-#### Other Buttons
+#### - Other Buttons
 
 `TAB` by default opens a new cmd window.
 

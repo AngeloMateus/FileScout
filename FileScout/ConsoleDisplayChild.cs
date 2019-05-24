@@ -24,6 +24,7 @@ namespace FileScout
             try
             {
                 FileAttributes attr = File.GetAttributes( ConsoleDisplay.selectedFile );
+
                 if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
                     childFiles = ConsoleDisplay.CombineArrays( ConsoleDisplay.selectedFile );
@@ -42,7 +43,7 @@ namespace FileScout
                             }
                             else
                             {
-                                Console.Write( ConsoleDisplay.ShortenFileName( Path.GetFileName( childFiles[i] ), 26 ));
+                                Console.Write( ConsoleDisplay.ShortenFileName( Path.GetFileName( childFiles[i] ), 26 ) );
 
                             }
                             Console.SetCursorPosition( 66, Console.WindowTop + 6 + i );
@@ -78,7 +79,20 @@ namespace FileScout
                 Console.SetCursorPosition( 66, Console.WindowTop + 5 );
                 Console.Write( "(Unauthorized access)" );
             }
+            catch (FileNotFoundException e)
+            {
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write( "(!) " + e.Message );
+                Console.ResetColor();
+                Console.ReadKey( true );
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+            }
             Console.SetWindowPosition( 0, originalTop );
+
         }
     }
 }

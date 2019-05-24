@@ -21,6 +21,7 @@ namespace FileScout
 
             do
             {
+
                 string[] directoryArray = CombineArrays( ConsoleDisplay.currentPath );
 
                 if (directoryArray.Length != 0)
@@ -156,21 +157,51 @@ namespace FileScout
                             AttemptOpenFile();
                         }
                         break;
-                    case 'r':
+                    case 'R':
                         {
                             new InputBox().RenameFile( selectedFile );
+                        }
+                        break;
+                    case 'N':
+                        {
+                            new InputBox().NewFile();
+                        }
+                        break;
+                    case 'F':
+                        {
+                            new InputBox().NewFolder();
+                        }
+                        break;
+                    case 'D':
+                        {
+                            new InputBox().DeleteFile( selectedFile );
                         }
                         break;
                     case ' ':
                         {
                             //TODO: implement Select multiple files/folder
-                            Console.WriteLine( "Spacebar pressed" );
                         }
                         break;
                     case 'q':
                         {
                             Console.Clear();
                             Environment.Exit( 0 );
+                        }
+                        break;
+                    case 'b':
+                        {
+
+                            if (ConsoleDisplay.files.Length != 0)
+                            {
+                                Cursor.cursorPosY = ConsoleDisplay.files.Length - 1;
+                                ConsoleDisplay.Display();
+                            }
+                        }
+                        break;
+                    case 't':
+                        {
+                            Cursor.cursorPosY = 0;
+                            ConsoleDisplay.Display();
                         }
                         break;
                 }

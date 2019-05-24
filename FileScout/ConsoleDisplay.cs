@@ -87,7 +87,6 @@ namespace FileScout
                 Display();
             }
 
-
             writer.Flush();
             Console.SetCursorPosition( 0, Cursor.cursorPosY );
 
@@ -95,6 +94,7 @@ namespace FileScout
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
+
             new ConsoleDisplayChild();
         }
 
@@ -243,9 +243,9 @@ namespace FileScout
             string shortenedPath = ShortenPath( currentPath );
 
             if (Console.WindowTop != 0)
-                writer.Write( "\n\n ^ " + shortenedPath+ Path.DirectorySeparatorChar + "\n   " );
+                writer.Write( "\n\n ^ " + shortenedPath + Path.DirectorySeparatorChar + "\n   " );
             else
-                writer.Write( "\n\n   " + shortenedPath+ Path.DirectorySeparatorChar + "\n   " );
+                writer.Write( "\n\n   " + shortenedPath + Path.DirectorySeparatorChar + "\n   " );
 
 
             for (int i = 0; i < shortenedPath.Length + 1; i++)

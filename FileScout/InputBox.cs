@@ -97,7 +97,7 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
-                    
+
             }
             ConsoleDisplay.ClearLine( Console.WindowTop );
         }
@@ -116,7 +116,7 @@ namespace FileScout
 
             for (int i = 0; i < ConsoleDisplay.files.Length; i++)
             {
-                if (Path.GetFileName(ConsoleDisplay.files[i]).ToLower().Contains( pattern.ToLower() ))
+                if (Path.GetFileName( ConsoleDisplay.files[i] ).ToLower().Contains( pattern.ToLower() ))
                 {
                     Cursor.cursorPosY = i;
                     break;
@@ -137,12 +137,12 @@ namespace FileScout
             Console.Write( ":." );
             Console.ResetColor();
 
-            ConsoleKeyInfo keyInfo = Console.ReadKey(true);
+            ConsoleKeyInfo keyInfo = Console.ReadKey( true );
             string key = keyInfo.KeyChar.ToString();
 
             for (int i = 0; i < ConsoleDisplay.files.Length; i++)
             {
-                if (Path.GetFileName( ConsoleDisplay.files[i]).StartsWith( key, StringComparison.InvariantCultureIgnoreCase))
+                if (Path.GetFileName( ConsoleDisplay.files[i] ).StartsWith( key, StringComparison.InvariantCultureIgnoreCase ))
                 {
                     Cursor.cursorPosY = i;
                     break;
@@ -152,12 +152,13 @@ namespace FileScout
             ConsoleDisplay.Display();
         }
 
-        public void RenameFile(string file)
+        //renames 'file' in the argument list to 'line'
+        public void RenameFile( string file )
         {
             string oldFile = file;
             ConsoleDisplay.ClearLine( Console.WindowTop );
             Console.SetCursorPosition( 0, Console.WindowTop );
-            Console.Write("RENAME to: ");
+            Console.Write( "RENAME to: " );
             string line = Console.ReadLine();
             try
             {
@@ -182,15 +183,132 @@ namespace FileScout
                 Console.SetCursorPosition( 0, Console.WindowTop );
                 Console.BackgroundColor = ConsoleColor.Red;
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.Write("(!) " + e.Message );
+                Console.Write( "(!) " + e.Message );
                 Console.ResetColor();
-                Console.ReadKey(true);
+                Console.ReadKey( true );
                 ConsoleDisplay.ClearLine( Console.WindowTop );
+                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
             }
-            
-            while (!oldFile.Equals( file ) )
+
+            while (!oldFile.Equals( file ))
             {
                 Thread.Sleep( 50 );
+            }
+        }
+        public void NewFolder()
+        {
+            ConsoleDisplay.ClearLine( Console.WindowTop );
+            Console.SetCursorPosition( 0, Console.WindowTop );
+            Console.Write( "NEW folder: " );
+            string file = Console.ReadLine();
+
+            try
+            {
+                if (file != String.Empty && !Directory.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
+                {
+                    Directory.CreateDirectory( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file );
+                }
+                else if (Directory.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
+                {
+                    ConsoleDisplay.ClearLine( Console.WindowTop );
+                    Console.SetCursorPosition( 0, Console.WindowTop );
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write( "(!) Directory " + file + " already exists!" );
+                    Console.ResetColor();
+                    Console.ReadKey( true );
+                    ConsoleDisplay.ClearLine( Console.WindowTop );
+                    ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                }
+            }
+            catch (Exception e)
+            {
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write( "(!) " + e.Message );
+                Console.ResetColor();
+                Console.ReadKey( true );
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+            }
+        }
+
+        public void NewFile()
+        {
+            ConsoleDisplay.ClearLine( Console.WindowTop );
+            Console.SetCursorPosition( 0, Console.WindowTop );
+            Console.Write( "NEW file: " );
+            string file = Console.ReadLine();
+
+            try
+            {
+                if (file != String.Empty && !File.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
+                {
+                    //File.Create( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file);
+
+                    FileStream fs = File.Create( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file );
+                    fs.Close();
+                }
+                else if (File.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
+                {
+                    ConsoleDisplay.ClearLine( Console.WindowTop );
+                    Console.SetCursorPosition( 0, Console.WindowTop );
+                    Console.BackgroundColor = ConsoleColor.Red;
+                    Console.ForegroundColor = ConsoleColor.White;
+                    Console.Write( "(!) File " + file + " already exists!" );
+                    Console.ResetColor();
+                    Console.ReadKey( true );
+                    ConsoleDisplay.ClearLine( Console.WindowTop );
+                    ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                }
+            }
+            catch (Exception e)
+            {
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write( "(!) " + e.Message );
+                Console.ResetColor();
+                Console.ReadKey( true );
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+            }
+        }
+
+        public void DeleteFile( string file )
+        {
+
+            ConsoleDisplay.ClearLine( Console.WindowTop );
+            Console.SetCursorPosition( 0, Console.WindowTop );
+            Console.Write( "DELETE? (press y) " + Path.GetFileName( file ) );
+            ConsoleKeyInfo cki = Console.ReadKey( true );
+
+            try
+            {
+                if (cki.KeyChar == 'y')
+                {
+                    if (!file.EndsWith( Path.DirectorySeparatorChar.ToString() ))
+                    {
+                        File.Delete( file );
+                        Cursor.cursorPosY = 0;
+                    }
+                    else
+                    {
+                        Directory.Delete( file );
+                        Cursor.cursorPosY = 0;
+                    }
+                }
+                else
+                {
+                    ConsoleDisplay.Display();
+                }
+            }
+            catch (Exception e)
+            {
+            //If a firectory is empty it will throw a filenotfound exception FIX!
             }
         }
     }
