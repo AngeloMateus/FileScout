@@ -250,7 +250,7 @@ namespace FileScout
 
             for (int i = 0; i < shortenedPath.Length + 1; i++)
             {
-                writer.Write( "~" );
+                writer.Write( "_" );
             }
             writer.Write( "\n\n" );
             writer.Flush();

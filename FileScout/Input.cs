@@ -174,7 +174,8 @@ namespace FileScout
                         break;
                     case 'D':
                         {
-                            new InputBox().DeleteFile( selectedFile );
+                            if (selectedFile != ConsoleDisplay.currentPath)
+                            new InputBox().DeleteFileWithPrompt( selectedFile );
                         }
                         break;
                     case ' ':

@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Threading;
 
 namespace FileScout
@@ -220,6 +222,10 @@ namespace FileScout
                     ConsoleDisplay.ClearLine( Console.WindowTop );
                     ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
                 }
+                else
+                {
+                    ConsoleDisplay.Display();
+                }
             }
             catch (Exception e)
             {
@@ -246,8 +252,6 @@ namespace FileScout
             {
                 if (file != String.Empty && !File.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
                 {
-                    //File.Create( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file);
-
                     FileStream fs = File.Create( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file );
                     fs.Close();
                 }
@@ -262,6 +266,10 @@ namespace FileScout
                     Console.ReadKey( true );
                     ConsoleDisplay.ClearLine( Console.WindowTop );
                     ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                }
+                else
+                {
+                    ConsoleDisplay.Display();
                 }
             }
             catch (Exception e)
@@ -278,27 +286,64 @@ namespace FileScout
             }
         }
 
-        public void DeleteFile( string file )
+        public void DeleteFile( String file )
+        {
+            try
+            {
+                FileAttributes attr = File.GetAttributes( file );
+
+                if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
+                {
+                    File.Delete( file );
+                    Cursor.cursorPosY = 0;
+                }
+                else if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                {
+                    DeleteFolder( file );
+                }
+
+                else
+                {
+                    ConsoleDisplay.Display();
+                }
+            }
+            catch (Exception e)
+            {
+                //FIX If a Directory is empty it will throw a FileNotFound exception FIX!
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write( "(!) " + e.Message );
+                Console.ResetColor();
+                Console.ReadKey( true );
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+            }
+        }
+
+        public void DeleteFileWithPrompt( String file )
         {
 
             ConsoleDisplay.ClearLine( Console.WindowTop );
             Console.SetCursorPosition( 0, Console.WindowTop );
-            Console.Write( "DELETE? (press y) " + Path.GetFileName( file ) );
+            Console.Write( "DELETE? (y?) " + Path.GetFileName( file ) );
             ConsoleKeyInfo cki = Console.ReadKey( true );
 
             try
             {
+                FileAttributes attr = File.GetAttributes( file );
+
                 if (cki.KeyChar == 'y')
                 {
-                    if (!file.EndsWith( Path.DirectorySeparatorChar.ToString() ))
+                    if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
                     {
                         File.Delete( file );
                         Cursor.cursorPosY = 0;
                     }
-                    else
+                    else if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                     {
-                        Directory.Delete( file );
-                        Cursor.cursorPosY = 0;
+                        DeleteFolderWithPrompt( file );
                     }
                 }
                 else
@@ -308,7 +353,61 @@ namespace FileScout
             }
             catch (Exception e)
             {
-            //If a firectory is empty it will throw a filenotfound exception FIX!
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
+                Console.BackgroundColor = ConsoleColor.Red;
+                Console.ForegroundColor = ConsoleColor.White;
+                Console.Write( "(!) " + e.Message );
+                Console.ResetColor();
+                Console.ReadKey( true );
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+            }
+        }
+
+        private void DeleteFolder( String folder )
+        {
+            IEnumerable<String> children = Directory.EnumerateFileSystemEntries( folder );
+            if (Tools.IsEmpty( children ))
+            {
+                Directory.Delete( folder );
+                Cursor.cursorPosY = 0;
+            }
+            else
+            {
+                foreach (String child in children)
+                {
+                    DeleteFile( child );
+                }
+                Directory.Delete( folder );
+                Cursor.cursorPosY = 0;
+            }
+        }
+
+        private void DeleteFolderWithPrompt( String folder )
+        {
+            IEnumerable<String> children = Directory.EnumerateFileSystemEntries( folder );
+            if (Tools.IsEmpty( children ))
+            {
+                Directory.Delete( folder );
+                Cursor.cursorPosY = 0;
+            }
+            else
+            {
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
+                Console.Write( "Folder is not empty! Delete folder and its contents? (y?) " + Path.GetFileName( folder ) );
+                ConsoleKeyInfo cki = Console.ReadKey( true );
+
+                if (cki.KeyChar == 'y')
+                {
+                    foreach (String child in children)
+                    {
+                        DeleteFile( child );
+                    }
+                    Directory.Delete( folder );
+                    Cursor.cursorPosY = 0;
+                }
             }
         }
     }

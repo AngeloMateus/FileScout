@@ -19,14 +19,12 @@ namespace FileScout
             doList.Add("Hide/Show hidden files");
             doList.Add("File/Dir Selection via space");
             doList.Add("Cut/Copy");
-            doList.Add("Fix new Directory security permissions");
             doList.Add("Bulk Delete/Cut/Copy");
             doList.Add("Option to Sort files by size");
             doList.Add("Startup Arguments to start FileScout in a specific directory");
             doList.Add("Create :help window to remind myself of the commands");
             doList.Add("Folder Marks: ' to view all marks; m to mark a location with prompt to name location; ' + d to delete mark");
             doList.Add("Color coding for Folder Marks");
-            doList.Add("Fix FileNotFound exception when deleting a file in an empty directory; check InputBox.DeleteFile()");
 
             Console.WriteLine(new string('*', Console.WindowWidth));
             Console.SetCursorPosition((Console.WindowWidth - intro.Length) / 2, 4);
