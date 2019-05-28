@@ -113,7 +113,6 @@ namespace FileScout
                     case 'h':
                         {
                             History.AddEntry();
-
                             //Set cursor to Parent folder
                             if (Directory.GetParent( ConsoleDisplay.currentPath ) != null)
                             {
@@ -175,7 +174,7 @@ namespace FileScout
                     case 'D':
                         {
                             if (selectedFile != ConsoleDisplay.currentPath)
-                            new InputBox().DeleteFileWithPrompt( selectedFile );
+                                new InputBox().DeleteFileWithPrompt( selectedFile );
                         }
                         break;
                     case ' ':
@@ -205,9 +204,13 @@ namespace FileScout
                             ConsoleDisplay.Display();
                         }
                         break;
+                    case 'i':
+                        {
+                            new FileInfoScreen(selectedFile);
+                        }
+                        break;
                 }
             }
-
             while (consoleKeyInfo.Key != ConsoleKey.Escape);
             Console.Clear();
         }
@@ -215,12 +218,11 @@ namespace FileScout
         //Select Parent folder and set cursor to this position
         private void SetCursorToPreviousPosition()
         {
-
             parentDirectory = Directory.GetParent( ConsoleDisplay.currentPath ).ToString();
             currentFileList = CombineArrays( parentDirectory );
             for (int i = 0; i < currentFileList.Length; i++)
             {
-                if (string.Compare( ConsoleDisplay.currentPath, currentFileList[i] ) == 0)
+                if (string.Compare( ConsoleDisplay.currentPath.ToLower(), currentFileList[i].ToLower() ) == 0)
                 {
                     Cursor.cursorPosY = i;
                 }

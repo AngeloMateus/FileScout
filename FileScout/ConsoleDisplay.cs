@@ -54,7 +54,7 @@ namespace FileScout
                         else
                         {
                             writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
-                                + Path.GetExtension( files[i] ), CalculateFileSize( files[i] ) );
+                                + Path.GetExtension( files[i] ), Tools.CalculateFileSize( files[i] ) );
                             selectedFile = Path.GetFullPath( files[i] );
                         }
                     }
@@ -69,7 +69,7 @@ namespace FileScout
                         else
                         {
                             writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
-                                + Path.GetExtension( files[i] ), CalculateFileSize( files[i] ) );
+                                + Path.GetExtension( files[i] ), Tools.CalculateFileSize( files[i] ) );
                         }
                     }
                 }
@@ -154,7 +154,7 @@ namespace FileScout
             else
             {
                 writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY - 1] ), 26 )
-                    + Path.GetExtension( files[Cursor.cursorPosY - 1] ), CalculateFileSize( files[Cursor.cursorPosY - 1] ) );
+                    + Path.GetExtension( files[Cursor.cursorPosY - 1] ), Tools.CalculateFileSize( files[Cursor.cursorPosY - 1] ) );
             }
             Console.SetCursorPosition( 0, Cursor.cursorPosY + topPadding - 1 );
 
@@ -167,7 +167,7 @@ namespace FileScout
             else
             {
                 writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY] ), 26 )
-                    + Path.GetExtension( files[Cursor.cursorPosY] ), CalculateFileSize( files[Cursor.cursorPosY] ) );
+                    + Path.GetExtension( files[Cursor.cursorPosY] ), Tools.CalculateFileSize( files[Cursor.cursorPosY] ) );
                 selectedFile = Path.GetFullPath( files[Cursor.cursorPosY] );
             }
             writer.Flush();
@@ -192,7 +192,7 @@ namespace FileScout
             else
             {
                 writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY + 1] ), 26 )
-                    + Path.GetExtension( files[Cursor.cursorPosY + 1] ), CalculateFileSize( files[Cursor.cursorPosY + 1] ) );
+                    + Path.GetExtension( files[Cursor.cursorPosY + 1] ), Tools.CalculateFileSize( files[Cursor.cursorPosY + 1] ) );
             }
             writer.Flush();
             Console.SetCursorPosition( 0, Cursor.cursorPosY + topPadding );
@@ -206,7 +206,7 @@ namespace FileScout
             else
             {
                 writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY] ), 26 )
-                    + Path.GetExtension( files[Cursor.cursorPosY] ), CalculateFileSize( files[Cursor.cursorPosY] ) );
+                    + Path.GetExtension( files[Cursor.cursorPosY] ), Tools.CalculateFileSize( files[Cursor.cursorPosY] ) );
                 selectedFile = Path.GetFullPath( files[Cursor.cursorPosY] );
             }
             writer.Flush();
@@ -220,35 +220,17 @@ namespace FileScout
             WriteCurrentPath();
         }
 
-        private static string CalculateFileSize( string file )
-        {
-            string[] sizeSuffixes = { " b", " KB", " MB", " GB", " TB", " PB", " EB" };
-            double fileSize = (double)new FileInfo( file ).Length;
-
-            //byte=0, Kb=1, Mb=2 ...
-            int magnitude = (int)Math.Log( fileSize, 1000 );
-
-            decimal adjustedSize = (decimal)fileSize / (1L << (magnitude * 10));
-
-            if (magnitude < 0)
-            {
-                magnitude = 0;
-            }
-
-            return string.Format( "{0,0}{1,-8}", Math.Round( adjustedSize, 0 ), sizeSuffixes[magnitude] );
-        }
-
         private static void WriteCurrentPath()
         {
             string shortenedPath = ShortenPath( currentPath );
 
             if (Console.WindowTop != 0)
-                writer.Write( "\n\n ^ " + shortenedPath + Path.DirectorySeparatorChar + "\n   " );
+                writer.Write( "\n\n ^ " + shortenedPath +  "\n   " );
             else
-                writer.Write( "\n\n   " + shortenedPath + Path.DirectorySeparatorChar + "\n   " );
+                writer.Write( "\n\n   " + shortenedPath +  "\n   " );
 
 
-            for (int i = 0; i < shortenedPath.Length + 1; i++)
+            for (int i = 0; i < shortenedPath.Length ; i++)
             {
                 writer.Write( "_" );
             }
