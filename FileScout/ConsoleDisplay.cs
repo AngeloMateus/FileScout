@@ -54,7 +54,7 @@ namespace FileScout
                         else
                         {
                             writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
-                                + Path.GetExtension( files[i] ), Tools.CalculateFileSize( files[i] ) );
+                                + Path.GetExtension( files[i] ), Tools.DisplayFileSize( files[i] ) );
                             selectedFile = Path.GetFullPath( files[i] );
                         }
                     }
@@ -69,7 +69,7 @@ namespace FileScout
                         else
                         {
                             writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
-                                + Path.GetExtension( files[i] ), Tools.CalculateFileSize( files[i] ) );
+                                + Path.GetExtension( files[i] ), Tools.DisplayFileSize( files[i] ) );
                         }
                     }
                 }
@@ -144,7 +144,7 @@ namespace FileScout
         public static void MoveDown()
         {
             Console.CursorVisible = false;
-            Console.SetCursorPosition( 0, Cursor.cursorPosY + topPadding - 1 );
+
 
             FileAttributes attr = File.GetAttributes( files[Cursor.cursorPosY - 1] );
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
@@ -154,9 +154,8 @@ namespace FileScout
             else
             {
                 writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY - 1] ), 26 )
-                    + Path.GetExtension( files[Cursor.cursorPosY - 1] ), Tools.CalculateFileSize( files[Cursor.cursorPosY - 1] ) );
+                    + Path.GetExtension( files[Cursor.cursorPosY - 1] ), Tools.DisplayFileSize( files[Cursor.cursorPosY - 1] ) );
             }
-            Console.SetCursorPosition( 0, Cursor.cursorPosY + topPadding - 1 );
 
             attr = File.GetAttributes( files[Cursor.cursorPosY] );
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
@@ -167,24 +166,39 @@ namespace FileScout
             else
             {
                 writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY] ), 26 )
-                    + Path.GetExtension( files[Cursor.cursorPosY] ), Tools.CalculateFileSize( files[Cursor.cursorPosY] ) );
+                    + Path.GetExtension( files[Cursor.cursorPosY] ), Tools.DisplayFileSize( files[Cursor.cursorPosY] ) );
                 selectedFile = Path.GetFullPath( files[Cursor.cursorPosY] );
             }
+            ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
+            Console.SetCursorPosition( 0, Cursor.cursorPosY + topPadding - 1 );
             writer.Flush();
-            new ConsoleDisplayChild();
 
-            //Clear top of window and Write Current Directory
+            //Clear top of window and write current path
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
+            new ConsoleDisplayChild();
         }
 
         public static void MoveUp()
         {
             Console.CursorVisible = false;
-            Console.SetCursorPosition( 0, Cursor.cursorPosY + topPadding + 1 );
+            Console.SetCursorPosition( 0, Cursor.cursorPosY + topPadding  );
 
-            FileAttributes attr = File.GetAttributes( files[Cursor.cursorPosY + 1] );
+            FileAttributes attr = File.GetAttributes( files[Cursor.cursorPosY] );
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileName( files[Cursor.cursorPosY] ), 26 ) + "\\" );
+                selectedFile = Path.GetFullPath( files[Cursor.cursorPosY] );
+            }
+            else
+            {
+                writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY] ), 26 )
+                    + Path.GetExtension( files[Cursor.cursorPosY] ), Tools.DisplayFileSize( files[Cursor.cursorPosY] ) );
+                selectedFile = Path.GetFullPath( files[Cursor.cursorPosY] );
+            }
+
+            attr = File.GetAttributes( files[Cursor.cursorPosY + 1] );
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
                 writer.WriteLine( "    > " + ShortenFileName( Path.GetFileName( files[Cursor.cursorPosY + 1] ), 26 ) + "\\" );
@@ -192,32 +206,17 @@ namespace FileScout
             else
             {
                 writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY + 1] ), 26 )
-                    + Path.GetExtension( files[Cursor.cursorPosY + 1] ), Tools.CalculateFileSize( files[Cursor.cursorPosY + 1] ) );
+                    + Path.GetExtension( files[Cursor.cursorPosY + 1] ), Tools.DisplayFileSize( files[Cursor.cursorPosY + 1] ) );
             }
             writer.Flush();
-            Console.SetCursorPosition( 0, Cursor.cursorPosY + topPadding );
-
-            attr = File.GetAttributes( files[Cursor.cursorPosY] );
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-            {
-                writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileName( files[Cursor.cursorPosY] ), 26 ) + "\\" );
-                selectedFile = Path.GetFullPath( files[Cursor.cursorPosY] );
-            }
-            else
-            {
-                writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[Cursor.cursorPosY] ), 26 )
-                    + Path.GetExtension( files[Cursor.cursorPosY] ), Tools.CalculateFileSize( files[Cursor.cursorPosY] ) );
-                selectedFile = Path.GetFullPath( files[Cursor.cursorPosY] );
-            }
-            writer.Flush();
-            Console.SetCursorPosition( 0, Cursor.cursorPosY );
-            new ConsoleDisplayChild();
-
 
             //Clear top of window and Write Current Directory
+            Console.SetCursorPosition( 0, Cursor.cursorPosY );
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
+            new ConsoleDisplayChild();
+
         }
 
         private static void WriteCurrentPath()
@@ -225,12 +224,12 @@ namespace FileScout
             string shortenedPath = ShortenPath( currentPath );
 
             if (Console.WindowTop != 0)
-                writer.Write( "\n\n ^ " + shortenedPath +  "\n   " );
+                writer.Write( "\n\n ^ " + shortenedPath + "\n   " );
             else
-                writer.Write( "\n\n   " + shortenedPath +  "\n   " );
+                writer.Write( "\n\n   " + shortenedPath + "\n   " );
 
 
-            for (int i = 0; i < shortenedPath.Length ; i++)
+            for (int i = 0; i < shortenedPath.Length; i++)
             {
                 writer.Write( "_" );
             }

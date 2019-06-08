@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Threading;
 
 namespace FileScout
@@ -99,7 +98,6 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
-
             }
             ConsoleDisplay.ClearLine( Console.WindowTop );
         }

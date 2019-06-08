@@ -206,7 +206,12 @@ namespace FileScout
                         break;
                     case 'i':
                         {
-                            new FileInfoScreen(selectedFile);
+                            new FileInfoScreen( selectedFile );
+                        }
+                        break;
+                    case 'f':
+                        {
+                            
                         }
                         break;
                 }
