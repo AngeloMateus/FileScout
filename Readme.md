@@ -32,13 +32,23 @@ Type `:` to input commands.
 
 #### - File actions
 
-`R` rename the selected file
-`N` creates a new file
-`F` creates a new folder
-`D` deletes a file or folder
+`r` rename the selected file
+
+`n` creates a new file
+
+`N` creates a new folder
+
+`d` deletes a file or folder
+
+`c` adds a file or folder to the selection list
+
+`p` paste all files in current directory and clear selection list
+
 
 #### - Other Buttons
 
 `TAB` by default opens a new cmd window.
 
-`ENTER` or 'L' Opens the file with the recomended application.
+`ENTER` or `L` Opens the file with the recomended application.
+
+`s` to view selection list

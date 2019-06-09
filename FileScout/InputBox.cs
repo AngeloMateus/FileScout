@@ -179,15 +179,7 @@ namespace FileScout
             }
             catch (Exception e)
             {
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write( "(!) " + e.Message );
-                Console.ResetColor();
-                Console.ReadKey( true );
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                Tools.DisplayError( e );
             }
 
             while (!oldFile.Equals( file ))
@@ -227,15 +219,7 @@ namespace FileScout
             }
             catch (Exception e)
             {
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write( "(!) " + e.Message );
-                Console.ResetColor();
-                Console.ReadKey( true );
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                Tools.DisplayError( e );
             }
         }
 
@@ -272,15 +256,7 @@ namespace FileScout
             }
             catch (Exception e)
             {
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write( "(!) " + e.Message );
-                Console.ResetColor();
-                Console.ReadKey( true );
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                Tools.DisplayError( e );
             }
         }
 
@@ -307,25 +283,19 @@ namespace FileScout
             }
             catch (Exception e)
             {
-                //FIX If a Directory is empty it will throw a FileNotFound exception FIX!
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write( "(!) " + e.Message );
-                Console.ResetColor();
-                Console.ReadKey( true );
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                Tools.DisplayError(e);
             }
         }
 
         public void DeleteFileWithPrompt( String file )
         {
-
             ConsoleDisplay.ClearLine( Console.WindowTop );
             Console.SetCursorPosition( 0, Console.WindowTop );
-            Console.Write( "DELETE? (y?) " + Path.GetFileName( file ) );
+            Console.Write( "DELETE " );
+            Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Gray;
+            Console.Write( Path.GetFileName( file ) );
+            Console.ResetColor();
+            Console.Write( " (y?)" );
             ConsoleKeyInfo cki = Console.ReadKey( true );
 
             try
@@ -351,15 +321,7 @@ namespace FileScout
             }
             catch (Exception e)
             {
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write( "(!) " + e.Message );
-                Console.ResetColor();
-                Console.ReadKey( true );
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                Tools.DisplayError( e );
             }
         }
 
@@ -394,7 +356,11 @@ namespace FileScout
             {
                 ConsoleDisplay.ClearLine( Console.WindowTop );
                 Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.Write( "Folder is not empty! Delete folder and its contents? (y?) " + Path.GetFileName( folder ) );
+                Console.Write( "Folder " );
+                Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Gray;
+                Console.Write(Path.GetFileName( folder ) );
+                Console.ResetColor();
+                Console.Write( " is not empty! Delete folder and its contents? (y?) " );
                 ConsoleKeyInfo cki = Console.ReadKey( true );
 
                 if (cki.KeyChar == 'y')
@@ -405,6 +371,10 @@ namespace FileScout
                     }
                     Directory.Delete( folder );
                     Cursor.cursorPosY = 0;
+                }
+                else
+                {
+                    ConsoleDisplay.Display();
                 }
             }
         }

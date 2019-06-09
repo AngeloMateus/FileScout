@@ -21,12 +21,10 @@ namespace FileScout
 
             do
             {
-
                 string[] directoryArray = CombineArrays( ConsoleDisplay.currentPath );
 
-                if (directoryArray.Length != 0)
+                if (directoryArray.Length > 0)
                     selectedFile = directoryArray[Cursor.cursorPosY];
-
 
                 //Read key to change cursor
                 consoleKeyInfo = Console.ReadKey( true );
@@ -156,22 +154,27 @@ namespace FileScout
                             AttemptOpenFile();
                         }
                         break;
-                    case 'R':
+                    case 'r':
                         {
                             new InputBox().RenameFile( selectedFile );
                         }
                         break;
-                    case 'N':
+                    case 's':
+                        {
+                            new SelectionRegisterScreen();
+                        }
+                        break;
+                    case 'n':
                         {
                             new InputBox().NewFile();
                         }
                         break;
-                    case 'F':
+                    case 'N':
                         {
                             new InputBox().NewFolder();
                         }
                         break;
-                    case 'D':
+                    case 'd':
                         {
                             if (selectedFile != ConsoleDisplay.currentPath)
                                 new InputBox().DeleteFileWithPrompt( selectedFile );
@@ -179,7 +182,9 @@ namespace FileScout
                         break;
                     case ' ':
                         {
-                            //TODO: implement Select multiple files/folder
+                            //Tools.SelectMultiple();
+                            //or
+                            //ConsoleDisplay.SelectMultpiple():
                         }
                         break;
                     case 'q':
@@ -209,9 +214,14 @@ namespace FileScout
                             new FileInfoScreen( selectedFile );
                         }
                         break;
-                    case 'f':
+                    case 'c':
                         {
-                            
+                            Tools.CopySelection(selectedFile);
+                        }
+                        break;
+                    case 'p':
+                        {
+                            Tools.PasteSelection();
                         }
                         break;
                 }
@@ -259,14 +269,7 @@ namespace FileScout
             }
             catch (Exception e)
             {
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write( "(!) " + e.Message );
-                Console.ResetColor();
-                Console.ReadKey( true );
-                ConsoleDisplay.Display(); ;
+                Tools.DisplayError( e );
             }
         }
     }

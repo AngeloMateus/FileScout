@@ -12,6 +12,7 @@ namespace FileScout
             string intro = "FileScout version " + FileVersionInfo.GetVersionInfo( Assembly.GetExecutingAssembly().Location ).ProductVersion;
             List<string> doList = new List<string>();
 
+            doList.Add( "On rename/newfile/newfolder change cursor position to the file to alter and rename from there" );
             doList.Add( "Add TAB auto-complete for : commands" );
             doList.Add( "Open new cmd without starting new window" );
             doList.Add( "Search entire file system WITH REGEX!" );
@@ -23,11 +24,14 @@ namespace FileScout
             doList.Add( "Create :help window to remind myself of the commands" );
             doList.Add( "Folder Marks: ' to view all marks in `Marks` screen; m to mark a location with prompt to name location; ' + d to delete mark" );
             doList.Add( "Color coding for Folder Marks" );
-            doList.Add( "\nTO FIX:\n" );
+            doList.Add( "Make calculating size when pressing i async" );
+            doList.Add( "\n" );
+            doList.Add( "TO FIX:\n" );
             doList.Add( "Fix flickering path when scrolling long directories" );
             doList.Add( "Fix (random) slow display of child files in directories with alot of files" );
             doList.Add( "Fix treversing directories - UnauthorizedAccessException - when pressing i" );
             doList.Add( "Fix `i` File Size not displaying correct Size on large files" );
+            doList.Add( "Fix FileNotFoundException when deleting last file in a directory" );
 
             Console.WriteLine( new string( '*', Console.WindowWidth ) );
             Console.SetCursorPosition( (Console.WindowWidth - intro.Length) / 2, Console.WindowHeight / 2 - 6 );

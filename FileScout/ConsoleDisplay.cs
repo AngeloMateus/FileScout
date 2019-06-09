@@ -7,7 +7,6 @@ namespace FileScout
 
     class ConsoleDisplay
     {
-
         public static string currentPath;
         public static string[] files;
         private static string[] currentFileList;

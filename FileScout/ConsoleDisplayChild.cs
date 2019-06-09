@@ -61,14 +61,12 @@ namespace FileScout
                             }
                         }
                     }
-                    if (childFiles.Length == 0)
+                    if (childFiles.Length == 0 && ConsoleDisplay.selectedFile != ConsoleDisplay.currentPath)
                     {
                         Console.SetCursorPosition( 66, Console.WindowTop + 5 );
                         Console.Write( "(empty)" );
                     }
                 }
-
-
             }
             catch (UnauthorizedAccessException)
             {
@@ -77,18 +75,9 @@ namespace FileScout
             }
             catch (FileNotFoundException e)
             {
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.BackgroundColor = ConsoleColor.Red;
-                Console.ForegroundColor = ConsoleColor.White;
-                Console.Write( "(!) " + e.Message );
-                Console.ResetColor();
-                Console.ReadKey( true );
-                ConsoleDisplay.ClearLine( Console.WindowTop );
-                ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+                Tools.DisplayError( e );
             }
             Console.SetWindowPosition( 0, originalTop );
-
         }
     }
 }
