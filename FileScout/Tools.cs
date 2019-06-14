@@ -161,6 +161,9 @@ namespace FileScout
                         }
                     }
                 }
+                else {
+                    DisplayError(new Exception("Nothing to paste"));
+                }
                 selectionRegister.Clear();
             }
             catch (Exception e)
@@ -176,7 +179,7 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write( "(!) " + e.Message );
+            Console.Write( "(!) " + e.Message + e.StackTrace);
             Console.ResetColor();
             Console.ReadKey( true );
             ConsoleDisplay.ClearLine( Console.WindowTop );

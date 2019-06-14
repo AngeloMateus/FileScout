@@ -15,7 +15,8 @@ namespace FileScout
             doList.Add( "On rename/newfile/newfolder change cursor position to the file to alter and rename from there" );
             doList.Add( "Add TAB auto-complete for : commands" );
             doList.Add( "Open new cmd without starting new window" );
-            doList.Add( "Search entire file system WITH REGEX!" );
+            doList.Add( "Search child directories WITH REGEX!" );
+            doList.Add( "Optimize scrolling through long directories (maybe by not iterating through array with each setCursorPosition)" );
             doList.Add( "File/Dir Selection via space" );
             doList.Add( "Single file Cut/Copy" );
             doList.Add( "Multiple Selection Delete/Cut/Copy" );
@@ -31,7 +32,6 @@ namespace FileScout
             doList.Add( "Fix (random) slow display of child files in directories with alot of files" );
             doList.Add( "Fix treversing directories - UnauthorizedAccessException - when pressing i" );
             doList.Add( "Fix `i` File Size not displaying correct Size on large files" );
-            doList.Add( "Fix FileNotFoundException when deleting last file in a directory" );
 
             Console.WriteLine( new string( '*', Console.WindowWidth ) );
             Console.SetCursorPosition( (Console.WindowWidth - intro.Length) / 2, Console.WindowHeight / 2 - 6 );

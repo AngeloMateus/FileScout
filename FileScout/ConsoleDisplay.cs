@@ -39,6 +39,9 @@ namespace FileScout
                     Console.SetBufferSize( Console.WindowWidth, files.Length + Console.WindowHeight );
 
                 Console.SetCursorPosition( 0, Console.WindowTop + 5 );
+
+                if (Tools.IsEmpty( files ))
+                    writer.WriteLine("    (empty)");
                 //Output all files and folders
                 for (int i = 0; i < files.Length; i++)
                 {

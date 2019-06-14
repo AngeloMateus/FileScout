@@ -307,6 +307,7 @@ namespace FileScout
                     if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
                     {
                         File.Delete( file );
+                        ConsoleDisplay.selectedFile = null;
                         Cursor.cursorPosY = 0;
                     }
                     else if ((attr & FileAttributes.Directory) == FileAttributes.Directory)

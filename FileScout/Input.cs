@@ -23,7 +23,7 @@ namespace FileScout
             {
                 string[] directoryArray = CombineArrays( ConsoleDisplay.currentPath );
 
-                if (directoryArray.Length > 0)
+                if (directoryArray.Length != 0)
                     selectedFile = directoryArray[Cursor.cursorPosY];
 
                 //Read key to change cursor

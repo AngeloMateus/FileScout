@@ -19,52 +19,55 @@ namespace FileScout
 
             try
             {
-                FileAttributes attr = File.GetAttributes( ConsoleDisplay.selectedFile );
-
-                if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                if (ConsoleDisplay.selectedFile != null)
                 {
-                    childFiles = ConsoleDisplay.CombineArrays( ConsoleDisplay.selectedFile );
-                    for (int i = 0; i < childFiles.Length; i++)
-                    {
-                        Console.SetCursorPosition( 60, Console.WindowTop + 5 + i );
-                        Console.Write( "|     " );
-                        if (i + 7 >= Console.WindowHeight)
-                        {
-                            Console.SetCursorPosition( 66, Console.WindowTop + 5 + i );
+                    FileAttributes attr = File.GetAttributes( ConsoleDisplay.selectedFile );
 
-                            FileAttributes attrChild = File.GetAttributes( childFiles[i] );
-                            if ((attrChild & FileAttributes.Directory) == FileAttributes.Directory)
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        childFiles = ConsoleDisplay.CombineArrays( ConsoleDisplay.selectedFile );
+                        for (int i = 0; i < childFiles.Length; i++)
+                        {
+                            Console.SetCursorPosition( 60, Console.WindowTop + 5 + i );
+                            Console.Write( "|     " );
+                            if (i + 7 >= Console.WindowHeight)
                             {
-                                Console.Write( ConsoleDisplay.ShortenFileName( "> " + Path.GetFileName( childFiles[i] ), 26 ) + Path.DirectorySeparatorChar );
+                                Console.SetCursorPosition( 66, Console.WindowTop + 5 + i );
+
+                                FileAttributes attrChild = File.GetAttributes( childFiles[i] );
+                                if ((attrChild & FileAttributes.Directory) == FileAttributes.Directory)
+                                {
+                                    Console.Write( ConsoleDisplay.ShortenFileName( "> " + Path.GetFileName( childFiles[i] ), 26 ) + Path.DirectorySeparatorChar );
+                                }
+                                else
+                                {
+                                    Console.Write( ConsoleDisplay.ShortenFileName( Path.GetFileName( childFiles[i] ), 26 ) );
+
+                                }
+                                Console.SetCursorPosition( 66, Console.WindowTop + 6 + i );
+                                Console.Write( "..." );
+                                break;
                             }
                             else
                             {
-                                Console.Write( ConsoleDisplay.ShortenFileName( Path.GetFileName( childFiles[i] ), 26 ) );
+                                Console.SetCursorPosition( 66, Console.WindowTop + 5 + i );
 
+                                FileAttributes attrChild = File.GetAttributes( childFiles[i] );
+                                if ((attrChild & FileAttributes.Directory) == FileAttributes.Directory)
+                                {
+                                    Console.Write( ConsoleDisplay.ShortenFileName( "> " + Path.GetFileName( childFiles[i] ), 26 ) + Path.DirectorySeparatorChar );
+                                }
+                                else
+                                {
+                                    Console.Write( ConsoleDisplay.ShortenFileName( Path.GetFileName( childFiles[i] ), 26 ) );
+                                }
                             }
-                            Console.SetCursorPosition( 66, Console.WindowTop + 6 + i );
-                            Console.Write( "..." );
-                            break;
                         }
-                        else
+                        if (childFiles.Length == 0 && ConsoleDisplay.selectedFile != ConsoleDisplay.currentPath)
                         {
-                            Console.SetCursorPosition( 66, Console.WindowTop + 5 + i );
-
-                            FileAttributes attrChild = File.GetAttributes( childFiles[i] );
-                            if ((attrChild & FileAttributes.Directory) == FileAttributes.Directory)
-                            {
-                                Console.Write( ConsoleDisplay.ShortenFileName( "> " + Path.GetFileName( childFiles[i] ), 26 ) + Path.DirectorySeparatorChar );
-                            }
-                            else
-                            {
-                                Console.Write( ConsoleDisplay.ShortenFileName( Path.GetFileName( childFiles[i] ), 26 ) );
-                            }
+                            Console.SetCursorPosition( 66, Console.WindowTop + 5 );
+                            Console.Write( "(empty)" );
                         }
-                    }
-                    if (childFiles.Length == 0 && ConsoleDisplay.selectedFile != ConsoleDisplay.currentPath)
-                    {
-                        Console.SetCursorPosition( 66, Console.WindowTop + 5 );
-                        Console.Write( "(empty)" );
                     }
                 }
             }
