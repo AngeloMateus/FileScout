@@ -153,11 +153,11 @@ namespace FileScout
                         string itemName = Path.GetFileName( item );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            CopyDirectory( item, ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + Path.GetFileName( item ) );
+                            CopyDirectory( item, State.currentPath + Path.DirectorySeparatorChar + Path.GetFileName( item ) );
                         }
                         else
                         {
-                            File.Copy( item, ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + itemName );
+                            File.Copy( item, State.currentPath + Path.DirectorySeparatorChar + itemName );
                         }
                     }
                 }
@@ -179,7 +179,7 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write( "(!) " + e.Message + e.StackTrace);
+            Console.Write( "(!) " + e.Message);
             Console.ResetColor();
             Console.ReadKey( true );
             ConsoleDisplay.ClearLine( Console.WindowTop );

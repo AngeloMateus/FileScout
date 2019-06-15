@@ -8,7 +8,6 @@ namespace FileScout
 {
     class InputBox
     {
-
         public void CommadMode()
         {
             ConsoleDisplay.ClearLine( Console.WindowTop );
@@ -18,7 +17,7 @@ namespace FileScout
             Console.Write( ":>" );
             Console.ResetColor();
 
-            var command = Console.ReadLine();
+            string command = Console.ReadLine();
 
             //Add all commands to an array if command isnt found display "Command Not Found"
             string[] commands = new string[] { "quit", "q", "cmd", "command prompt", "powershell", "pwr", "explore", "x", "v", "version" };
@@ -65,7 +64,7 @@ namespace FileScout
                         Process process = new Process();
                         process.StartInfo.FileName = "cmd";
                         process.StartInfo.UseShellExecute = true;
-                        process.StartInfo.WorkingDirectory = ConsoleDisplay.currentPath;
+                        process.StartInfo.WorkingDirectory = State.currentPath;
                         process.Start();
                         ConsoleDisplay.Display();
                     }
@@ -77,7 +76,7 @@ namespace FileScout
                         Process process = new Process();
                         process.StartInfo.FileName = "powershell";
                         process.StartInfo.UseShellExecute = true;
-                        process.StartInfo.WorkingDirectory = ConsoleDisplay.currentPath;
+                        process.StartInfo.WorkingDirectory = State.currentPath;
                         process.Start();
                         ConsoleDisplay.Display();
                     }
@@ -86,7 +85,7 @@ namespace FileScout
                 case "x":
                     {
                         Console.Clear();
-                        Process.Start( @ConsoleDisplay.currentPath );
+                        Process.Start( @State.currentPath );
                         ConsoleDisplay.Display();
                     }
                     break;
@@ -118,7 +117,7 @@ namespace FileScout
             {
                 if (Path.GetFileName( ConsoleDisplay.files[i] ).ToLower().Contains( pattern.ToLower() ))
                 {
-                    Cursor.cursorPosY = i;
+                    State.cursorPosY = i;
                     break;
                 }
             }
@@ -140,14 +139,18 @@ namespace FileScout
             ConsoleKeyInfo keyInfo = Console.ReadKey( true );
             string key = keyInfo.KeyChar.ToString();
 
+            bool hasKey;
+            //iterate through directory and find files that start with key
             for (int i = 0; i < ConsoleDisplay.files.Length; i++)
             {
-                if (Path.GetFileName( ConsoleDisplay.files[i] ).StartsWith( key, StringComparison.InvariantCultureIgnoreCase ))
+                hasKey = Path.GetFileName( ConsoleDisplay.files[i] ).StartsWith( key, StringComparison.InvariantCultureIgnoreCase );
+                if (hasKey)
                 {
-                    Cursor.cursorPosY = i;
-                    break;
+                    State.findKeyMatches.Add( Path.GetFileName( ConsoleDisplay.files[i] ) );
+                    State.cursorPosY = State.currentFindKeyPosition;
                 }
             }
+
             Console.Clear();
             ConsoleDisplay.Display();
         }
@@ -166,11 +169,11 @@ namespace FileScout
                 FileAttributes attr = File.GetAttributes( file );
                 if ((attr & FileAttributes.Directory) != FileAttributes.Directory && line != String.Empty)
                 {
-                    File.Move( file, ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + line );
+                    File.Move( file, State.currentPath + Path.DirectorySeparatorChar + line );
                 }
                 else if ((attr & FileAttributes.Directory) == FileAttributes.Directory && line != String.Empty)
                 {
-                    Directory.Move( file, ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + line );
+                    Directory.Move( file, State.currentPath + Path.DirectorySeparatorChar + line );
                 }
                 else
                 {
@@ -196,11 +199,12 @@ namespace FileScout
 
             try
             {
-                if (file != String.Empty && !Directory.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
+                if (file != String.Empty && !Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
                 {
-                    Directory.CreateDirectory( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file );
+                    Directory.CreateDirectory( State.currentPath + Path.DirectorySeparatorChar + file );
+                    State.cursorPosY = 0;
                 }
-                else if (Directory.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
+                else if (Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
                 {
                     ConsoleDisplay.ClearLine( Console.WindowTop );
                     Console.SetCursorPosition( 0, Console.WindowTop );
@@ -232,12 +236,13 @@ namespace FileScout
 
             try
             {
-                if (file != String.Empty && !File.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
+                if (file != String.Empty && !File.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
                 {
-                    FileStream fs = File.Create( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file );
+                    FileStream fs = File.Create( State.currentPath + Path.DirectorySeparatorChar + file );
                     fs.Close();
+                    State.cursorPosY = 0;
                 }
-                else if (File.Exists( ConsoleDisplay.currentPath + Path.DirectorySeparatorChar + file ))
+                else if (File.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
                 {
                     ConsoleDisplay.ClearLine( Console.WindowTop );
                     Console.SetCursorPosition( 0, Console.WindowTop );
@@ -269,7 +274,6 @@ namespace FileScout
                 if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
                 {
                     File.Delete( file );
-                    Cursor.cursorPosY = 0;
                 }
                 else if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
@@ -283,7 +287,7 @@ namespace FileScout
             }
             catch (Exception e)
             {
-                Tools.DisplayError(e);
+                Tools.DisplayError( e );
             }
         }
 
@@ -308,7 +312,9 @@ namespace FileScout
                     {
                         File.Delete( file );
                         ConsoleDisplay.selectedFile = null;
-                        Cursor.cursorPosY = 0;
+
+                        if (State.cursorPosY > 0)
+                            State.cursorPosY = State.cursorPosY - 1;
                     }
                     else if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                     {
@@ -332,7 +338,7 @@ namespace FileScout
             if (Tools.IsEmpty( children ))
             {
                 Directory.Delete( folder );
-                Cursor.cursorPosY = 0;
+                State.cursorPosY = 0;
             }
             else
             {
@@ -341,7 +347,7 @@ namespace FileScout
                     DeleteFile( child );
                 }
                 Directory.Delete( folder );
-                Cursor.cursorPosY = 0;
+                State.cursorPosY = 0;
             }
         }
 
@@ -351,7 +357,10 @@ namespace FileScout
             if (Tools.IsEmpty( children ))
             {
                 Directory.Delete( folder );
-                Cursor.cursorPosY = 0;
+                if (State.cursorPosY > 0)
+                    State.cursorPosY = State.cursorPosY - 1;
+                if (State.cursorPosY == 0)
+                    ConsoleDisplay.selectedFile = State.currentPath;
             }
             else
             {
@@ -359,7 +368,7 @@ namespace FileScout
                 Console.SetCursorPosition( 0, Console.WindowTop );
                 Console.Write( "Folder " );
                 Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Gray;
-                Console.Write(Path.GetFileName( folder ) );
+                Console.Write( Path.GetFileName( folder ) );
                 Console.ResetColor();
                 Console.Write( " is not empty! Delete folder and its contents? (y?) " );
                 ConsoleKeyInfo cki = Console.ReadKey( true );
@@ -371,7 +380,7 @@ namespace FileScout
                         DeleteFile( child );
                     }
                     Directory.Delete( folder );
-                    Cursor.cursorPosY = 0;
+                    State.cursorPosY = 0;
                 }
                 else
                 {

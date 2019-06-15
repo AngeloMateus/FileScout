@@ -23,20 +23,20 @@ namespace FileScout
         public static void AddEntry()
         {
 
-            if (!historyDictionary.ContainsKey( ConsoleDisplay.currentPath ))
+            if (!historyDictionary.ContainsKey( State.currentPath ))
             {
-                historyDictionary.Add( ConsoleDisplay.currentPath, Cursor.cursorPosY );
+                historyDictionary.Add( State.currentPath, State.cursorPosY );
             }
             else
             {
-                historyDictionary.Remove(ConsoleDisplay.currentPath);
-                historyDictionary.Add( ConsoleDisplay.currentPath, Cursor.cursorPosY );
+                historyDictionary.Remove( State.currentPath);
+                historyDictionary.Add( State.currentPath, State.cursorPosY );
             }
         }
 
         public static void SetPointer()
         {
-            historyDictionary.TryGetValue(ConsoleDisplay.currentPath, out Cursor.cursorPosY);
+            historyDictionary.TryGetValue( State.currentPath, out State.cursorPosY);
         }
 
     }

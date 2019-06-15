@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -13,6 +14,7 @@ namespace FileScout
         public Input()
         {
             Console.CursorVisible = false;
+            State.findKeyMatches = new List<string>();
         }
 
         public void StartReading()
@@ -21,26 +23,28 @@ namespace FileScout
 
             do
             {
-                string[] directoryArray = CombineArrays( ConsoleDisplay.currentPath );
+                //maybe this is a fix? It works so far leave it for a bit
+                //string[] directoryArray = CombineArrays( ConsoleDisplay.currentPath );
+                string[] directoryArray = ConsoleDisplay.files;
 
-                if (directoryArray.Length != 0)
-                    selectedFile = directoryArray[Cursor.cursorPosY];
+                if (!directoryArray.IsEmpty())
+                    selectedFile = directoryArray[State.cursorPosY];
 
                 //Read key to change cursor
                 consoleKeyInfo = Console.ReadKey( true );
                 switch (consoleKeyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
-                        if (Cursor.cursorPosY > 0)
+                        if (State.cursorPosY > 0)
                         {
-                            Cursor.cursorPosY--;
+                            State.cursorPosY--;
                             ConsoleDisplay.MoveUp();
                         }
                         break;
                     case ConsoleKey.DownArrow:
-                        if (Cursor.cursorPosY < ConsoleDisplay.files.Length - 1)
+                        if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
                         {
-                            Cursor.cursorPosY++;
+                            State.cursorPosY++;
                             ConsoleDisplay.MoveDown();
                         }
                         break;
@@ -51,7 +55,7 @@ namespace FileScout
 
                             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                             {
-                                ConsoleDisplay.currentPath = selectedFile;
+                                State.currentPath = selectedFile;
                                 History.SetPointer();
                                 ConsoleDisplay.Display();
                             }
@@ -66,10 +70,10 @@ namespace FileScout
                             History.AddEntry();
 
                             //Set cursor to Parent folder
-                            if (Directory.GetParent( ConsoleDisplay.currentPath ) != null)
+                            if (Directory.GetParent( State.currentPath ) != null)
                             {
                                 SetCursorToPreviousPosition();
-                                ConsoleDisplay.currentPath = Directory.GetParent( ConsoleDisplay.currentPath ).ToString();
+                                State.currentPath = Directory.GetParent( State.currentPath ).ToString();
                             }
                             ConsoleDisplay.Display();
                         }
@@ -78,16 +82,16 @@ namespace FileScout
                 switch (consoleKeyInfo.KeyChar)
                 {
                     case 'k':
-                        if (Cursor.cursorPosY > 0)
+                        if (State.cursorPosY > 0)
                         {
-                            Cursor.cursorPosY--;
+                            State.cursorPosY--;
                             ConsoleDisplay.MoveUp();
                         }
                         break;
                     case 'j':
-                        if (Cursor.cursorPosY < ConsoleDisplay.files.Length - 1)
+                        if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
                         {
-                            Cursor.cursorPosY++;
+                            State.cursorPosY++;
                             ConsoleDisplay.MoveDown();
                         }
                         break;
@@ -98,7 +102,7 @@ namespace FileScout
 
                             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                             {
-                                ConsoleDisplay.currentPath = selectedFile;
+                                State.currentPath = selectedFile;
                                 History.SetPointer();
                                 ConsoleDisplay.Display();
                             }
@@ -112,10 +116,10 @@ namespace FileScout
                         {
                             History.AddEntry();
                             //Set cursor to Parent folder
-                            if (Directory.GetParent( ConsoleDisplay.currentPath ) != null)
+                            if (Directory.GetParent( State.currentPath ) != null)
                             {
                                 SetCursorToPreviousPosition();
-                                ConsoleDisplay.currentPath = Directory.GetParent( ConsoleDisplay.currentPath ).ToString();
+                                State.currentPath = Directory.GetParent( State.currentPath ).ToString();
                             }
                             ConsoleDisplay.Display();
                         }
@@ -128,7 +132,7 @@ namespace FileScout
                             process.StartInfo = startInfo;
                             startInfo.FileName = "cmd";
                             startInfo.UseShellExecute = true;
-                            startInfo.WorkingDirectory = ConsoleDisplay.currentPath;
+                            startInfo.WorkingDirectory = State.currentPath;
                             process.Start();
                             process.WaitForExit();
                             ConsoleDisplay.Display();
@@ -176,7 +180,7 @@ namespace FileScout
                         break;
                     case 'd':
                         {
-                            if (selectedFile != ConsoleDisplay.currentPath)
+                            if (selectedFile != State.currentPath)
                                 new InputBox().DeleteFileWithPrompt( selectedFile );
                         }
                         break;
@@ -198,14 +202,14 @@ namespace FileScout
 
                             if (ConsoleDisplay.files.Length != 0)
                             {
-                                Cursor.cursorPosY = ConsoleDisplay.files.Length - 1;
+                                State.cursorPosY = ConsoleDisplay.files.Length - 1;
                                 ConsoleDisplay.Display();
                             }
                         }
                         break;
                     case 't':
                         {
-                            Cursor.cursorPosY = 0;
+                            State.cursorPosY = 0;
                             ConsoleDisplay.Display();
                         }
                         break;
@@ -216,12 +220,17 @@ namespace FileScout
                         break;
                     case 'c':
                         {
-                            Tools.CopySelection(selectedFile);
+                            Tools.CopySelection( selectedFile );
                         }
                         break;
                     case 'p':
                         {
                             Tools.PasteSelection();
+                        }
+                        break;
+                    case 'z':
+                        {
+                           DebugWindow();
                         }
                         break;
                 }
@@ -233,13 +242,13 @@ namespace FileScout
         //Select Parent folder and set cursor to this position
         private void SetCursorToPreviousPosition()
         {
-            parentDirectory = Directory.GetParent( ConsoleDisplay.currentPath ).ToString();
+            parentDirectory = Directory.GetParent( State.currentPath ).ToString();
             currentFileList = CombineArrays( parentDirectory );
             for (int i = 0; i < currentFileList.Length; i++)
             {
-                if (string.Compare( ConsoleDisplay.currentPath.ToLower(), currentFileList[i].ToLower() ) == 0)
+                if (string.Compare( State.currentPath.ToLower(), currentFileList[i].ToLower() ) == 0)
                 {
-                    Cursor.cursorPosY = i;
+                    State.cursorPosY = i;
                 }
             }
         }
@@ -271,6 +280,22 @@ namespace FileScout
             {
                 Tools.DisplayError( e );
             }
+        }
+
+        private void DebugWindow()
+        {
+            Console.Clear();
+            Console.WriteLine( "****DEBUG****\n\n" );
+            Console.WriteLine( "ConsoleDisplay.files: " );
+            for (int i = 0; i < ConsoleDisplay.files.Length; i++)
+            {
+                Console.WriteLine( ConsoleDisplay.files[i] );
+            }
+            Console.WriteLine( "\nselectedFile: " + ConsoleDisplay.selectedFile );
+            Console.WriteLine( "\nState.CursorPosY: " + State.cursorPosY );
+            Console.WriteLine("\nState.currentPath: "+ State.currentPath);
+            Console.ReadKey( true );
+            ConsoleDisplay.Display();
         }
     }
 }

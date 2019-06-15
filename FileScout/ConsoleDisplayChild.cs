@@ -63,7 +63,7 @@ namespace FileScout
                                 }
                             }
                         }
-                        if (childFiles.Length == 0 && ConsoleDisplay.selectedFile != ConsoleDisplay.currentPath)
+                        if (childFiles.Length == 0 && ConsoleDisplay.selectedFile != State.currentPath)
                         {
                             Console.SetCursorPosition( 66, Console.WindowTop + 5 );
                             Console.Write( "(empty)" );
