@@ -97,15 +97,23 @@ namespace FileScout
             return string.Format( "{0,0}{1,-8}", Math.Round( adjustedSize, 1 ), sizeSuffixes[magnitude] );
         }
 
-        public static void CopySelection( string file )
+        public static void CopySelection( string item )
         {
-            selectionRegister.Add( file );
-            Console.SetCursorPosition( 0, 0 );
-            Console.Write( "Added " );
-            Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Gray;
-            Console.Write( Path.GetFileName( file ) );
-            Console.ResetColor();
-            Console.Write( " to Selection." );
+            //move down if possible
+            if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
+            {
+                State.cursorPosY++;
+                ConsoleDisplay.MoveDown();
+            }
+            if (!selectionRegister.Contains(item)) {
+                selectionRegister.Add( item );
+                Console.SetCursorPosition( 0, 0 );
+                Console.Write( "Added " );
+                Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Gray;
+                Console.Write( Path.GetFileName( item ) );
+                Console.ResetColor();
+                Console.Write( " to Selection." );
+            }
         }
 
         public static void CopyDirectory( string sourceDirectory, string destDirectory )

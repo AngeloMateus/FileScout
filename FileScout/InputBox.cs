@@ -119,9 +119,8 @@ namespace FileScout
                 {
                     State.cursorPosY = i;
                     break;
-                }
+                }else if(i == ConsoleDisplay.files.Length -1)
                 Tools.DisplayError(new Exception("Search returned no results"));
-                break;
             } 
 
 
