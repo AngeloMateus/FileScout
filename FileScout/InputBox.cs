@@ -120,7 +120,9 @@ namespace FileScout
                     State.cursorPosY = i;
                     break;
                 }
-            }
+                Tools.DisplayError(new Exception("Search returned no results"));
+                break;
+            } 
 
 
             Console.Clear();
@@ -129,30 +131,51 @@ namespace FileScout
 
         public void JumpToLetter()
         {
-            ConsoleDisplay.ClearLine( Console.WindowTop );
-            Console.SetCursorPosition( 0, Console.WindowTop );
-
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write( ":." );
-            Console.ResetColor();
-
-            ConsoleKeyInfo keyInfo = Console.ReadKey( true );
-            string key = keyInfo.KeyChar.ToString();
-
-            bool hasKey;
-            //iterate through directory and find files that start with key
-            for (int i = 0; i < ConsoleDisplay.files.Length; i++)
+            try
             {
-                hasKey = Path.GetFileName( ConsoleDisplay.files[i] ).StartsWith( key, StringComparison.InvariantCultureIgnoreCase );
-                if (hasKey)
-                {
-                    State.findKeyMatches.Add( Path.GetFileName( ConsoleDisplay.files[i] ) );
-                    State.cursorPosY = State.currentFindKeyPosition;
-                }
-            }
+                ConsoleDisplay.ClearLine( Console.WindowTop );
+                Console.SetCursorPosition( 0, Console.WindowTop );
 
-            Console.Clear();
-            ConsoleDisplay.Display();
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.Write( ":." );
+                Console.ResetColor();
+
+                ConsoleKeyInfo keyInfo = Console.ReadKey( true );
+                char key = keyInfo.KeyChar;
+
+                if (key != State.currentFindKey)
+                {
+                    State.findKeyMatches.Clear();
+                }
+
+                bool hasKey;
+                //iterate through directory and find files that start with key
+                for (int i = 0; i < ConsoleDisplay.files.Length; i++)
+                {
+                    hasKey = Path.GetFileName( ConsoleDisplay.files[i] ).StartsWith( key.ToString(), StringComparison.InvariantCultureIgnoreCase );
+
+                    if (hasKey)
+                    {
+                        State.findKeyMatches.Add( i );
+                    }
+                }
+
+                State.cursorPosY = State.findKeyMatches[State.currentFindKeyPosition];
+                if (State.currentFindKeyPosition + 1 < State.findKeyMatches.Count)
+                {
+                    State.currentFindKeyPosition++;
+                }
+                else
+                {
+                    State.currentFindKeyPosition = 0;
+                }
+                Console.Clear();
+                ConsoleDisplay.Display();
+            }
+            catch(Exception e)
+            {
+                Tools.DisplayError(new Exception("Search returned no results"));
+            }
         }
 
         //renames 'file' in the argument list to 'line'

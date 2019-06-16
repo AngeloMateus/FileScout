@@ -14,7 +14,7 @@ namespace FileScout
         public Input()
         {
             Console.CursorVisible = false;
-            State.findKeyMatches = new List<string>();
+            State.findKeyMatches = new List<int>();
         }
 
         public void StartReading()
@@ -230,7 +230,7 @@ namespace FileScout
                         break;
                     case 'z':
                         {
-                           DebugWindow();
+                            DebugWindow();
                         }
                         break;
                 }
@@ -293,7 +293,9 @@ namespace FileScout
             }
             Console.WriteLine( "\nselectedFile: " + ConsoleDisplay.selectedFile );
             Console.WriteLine( "\nState.CursorPosY: " + State.cursorPosY );
-            Console.WriteLine("\nState.currentPath: "+ State.currentPath);
+            Console.WriteLine( "\nState.currentPath: " + State.currentPath );
+            Console.WriteLine( "\nState.findKeyMatches"  );
+            State.findKeyMatches.ForEach( ( x ) => Console.WriteLine( x ) );
             Console.ReadKey( true );
             ConsoleDisplay.Display();
         }
