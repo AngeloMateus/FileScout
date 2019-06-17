@@ -36,7 +36,7 @@ namespace FileScout
                     commandExists = false;
                 }
             }
-
+            /*
             if (!commandExists && command != String.Empty)
             {
                 Console.ForegroundColor = ConsoleColor.DarkRed;
@@ -45,6 +45,7 @@ namespace FileScout
                 Console.ResetColor();
                 Thread.Sleep( 260 );
             }
+            */
 
             switch (command.ToLower())
             {
@@ -97,6 +98,23 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
+                default:
+                    {
+                        Process process = new Process();
+                        var startInfo = new System.Diagnostics.ProcessStartInfo
+                        {
+                            WorkingDirectory = @State.currentPath,
+                            WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal,
+                            FileName = "cmd.exe",
+                            RedirectStandardInput = true,
+                            UseShellExecute = false,
+                            Arguments = "/C " + command,
+                    };
+                        process.StartInfo = startInfo;
+                        process.Start();
+
+                    }
+                    break;
             }
             ConsoleDisplay.ClearLine( Console.WindowTop );
         }
@@ -119,9 +137,10 @@ namespace FileScout
                 {
                     State.cursorPosY = i;
                     break;
-                }else if(i == ConsoleDisplay.files.Length -1)
-                Tools.DisplayError(new Exception("Search returned no results"));
-            } 
+                }
+                else if (i == ConsoleDisplay.files.Length - 1)
+                    Tools.DisplayError( new Exception( "Search returned no results" ) );
+            }
 
 
             Console.Clear();
@@ -171,9 +190,9 @@ namespace FileScout
                 Console.Clear();
                 ConsoleDisplay.Display();
             }
-            catch(Exception e)
+            catch (Exception e)
             {
-                Tools.DisplayError(new Exception("Search returned no results"));
+                Tools.DisplayError( new Exception( "Search returned no results" ) );
             }
         }
 
@@ -360,7 +379,10 @@ namespace FileScout
             if (Tools.IsEmpty( children ))
             {
                 Directory.Delete( folder );
-                State.cursorPosY = 0;
+                if (State.cursorPosY > 0)
+                    State.cursorPosY = State.cursorPosY - 1;
+                if (State.cursorPosY == 0)
+                    ConsoleDisplay.selectedFile = State.currentPath;
             }
             else
             {
