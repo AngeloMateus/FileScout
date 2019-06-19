@@ -13,15 +13,17 @@ Use arrow keys or `h` `j` `k` `l`
 
 Type `:` to input commands.
 
-`command prompt` | `cmd` - starts windows command prompt in the current directory
+`c` - starts windows command prompt in the current directory
 
-`powershell` | `pwr` - starts powershell (non-admin) in the current directory
+`p` - starts powershell (non-admin) in the current directory
 
-`explore` | `x` - opens Windows File Explorer in the current directory
+`x` - opens Windows File Explorer in the current directory
 
-`version` | `v` - displays version and TODO list
+`v` - displays version and TODO list
 
-`quit` | `q` - exits FileScout
+`q` - exits FileScouts
+
+*Any other command will be run from cmd prompt*
 
 #### - Searching 
 
@@ -49,6 +51,6 @@ Type `:` to input commands.
 
 `TAB` by default opens a new cmd window.
 
-`ENTER` or `L` Opens the file with the recomended application.
+`ENTER` or `L` Opens the file with the recommended application.
 
 `s` to view selection list

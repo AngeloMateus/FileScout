@@ -11,7 +11,7 @@ namespace FileScout
         public void CheckFiles()
         {
             watcher = new FileSystemWatcher();
-            
+
             watcher.Path = State.currentPath;
             watcher.NotifyFilter = NotifyFilters.LastAccess
                      | NotifyFilters.LastWrite
@@ -20,7 +20,7 @@ namespace FileScout
 
             watcher.Filter = "*";
 
-            watcher.Changed += new FileSystemEventHandler(WatcherChanged);
+            watcher.Changed += new FileSystemEventHandler( WatcherChanged );
             watcher.Created += new FileSystemEventHandler( WatcherChanged );
             watcher.Deleted += new FileSystemEventHandler( WatcherChanged );
             watcher.Renamed += new RenamedEventHandler( WatcherChanged );
@@ -31,12 +31,13 @@ namespace FileScout
 
         public static void RefreshWatcherPath()
         {
-                watcher.Path = State.currentPath;
+            watcher.Path = State.currentPath;
         }
 
         private void WatcherChanged( object sender, FileSystemEventArgs e )
         {
-            ConsoleDisplay.Display();
+            if (State.isWatching)
+                ConsoleDisplay.Display();
         }
 
     }

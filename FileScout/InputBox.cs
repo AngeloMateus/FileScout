@@ -20,7 +20,7 @@ namespace FileScout
             string command = Console.ReadLine();
 
             //Add all commands to an array if command isnt found display "Command Not Found"
-            string[] commands = new string[] { "quit", "q", "cmd", "command prompt", "powershell", "pwr", "explore", "x", "v", "version" };
+            string[] commands = new string[] { "q", "c", "p", "x", "v" };
 
             bool commandExists = true;
 
@@ -51,15 +51,13 @@ namespace FileScout
             {
                 case "":
                     break;
-                case "quit":
                 case "q":
                     {
                         Console.Clear();
                         Environment.Exit( 0 );
                     }
                     break;
-                case "cmd":
-                case "command prompt":
+                case "c":
                     {
                         Console.Clear();
                         Process process = new Process();
@@ -70,8 +68,7 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
-                case "powershell":
-                case "pwr":
+                case "p":
                     {
                         Console.Clear();
                         Process process = new Process();
@@ -82,7 +79,6 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
-                case "explore":
                 case "x":
                     {
                         Console.Clear();
@@ -91,7 +87,6 @@ namespace FileScout
                     }
                     break;
                 case "v":
-                case "version":
                     {
                         Console.Clear();
                         new About();
@@ -100,19 +95,14 @@ namespace FileScout
                     break;
                 default:
                     {
-                        Process process = new Process();
-                        var startInfo = new System.Diagnostics.ProcessStartInfo
+                        try
                         {
-                            WorkingDirectory = @State.currentPath,
-                            WindowStyle = System.Diagnostics.ProcessWindowStyle.Normal,
-                            FileName = "cmd.exe",
-                            RedirectStandardInput = true,
-                            UseShellExecute = false,
-                            Arguments = "/C " + command,
-                    };
-                        process.StartInfo = startInfo;
-                        process.Start();
-
+                            new ChildProcess(command);
+                        }
+                        catch (Exception e)
+                        {
+                            Tools.DisplayError( e );
+                        }
                     }
                     break;
             }

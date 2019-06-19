@@ -9,6 +9,7 @@ namespace FileScout
     {
         public About()
         {
+            //build | year dayOfYear | timeStamp
             string intro = "FileScout version " + FileVersionInfo.GetVersionInfo( Assembly.GetExecutingAssembly().Location ).ProductVersion;
             List<string> doList = new List<string>();
 
