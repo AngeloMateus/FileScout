@@ -1,5 +1,5 @@
 using System;
-using System.IO;
+using System.Diagnostics;
 using System.Threading;
 
 namespace FileScout
@@ -10,8 +10,6 @@ namespace FileScout
         static void Main( string[] args )
         {
             Console.Title = "FileScout";
-
-
 
             //Reads user input on it's own thread
             Input readInput = new Input();

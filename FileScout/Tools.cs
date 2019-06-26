@@ -38,9 +38,7 @@ namespace FileScout
         //Sums the size of all files in a folder
         private static long CalculateFileSize( DirectoryInfo dir )
         {
-
             long sizeSum = dir.EnumerateFiles().Sum( file => file.Length );
-
             return sizeSum;
         }
 
@@ -52,8 +50,6 @@ namespace FileScout
             try
             {
                 IEnumerable<DirectoryInfo> dirInfos = dir.EnumerateDirectories();
-
-
                 if (dirInfos.IsEmpty())
                 {
                     totalSize += CalculateFileSize( dir );
@@ -69,32 +65,32 @@ namespace FileScout
             }
             catch (UnauthorizedAccessException ua)
             {
-
             }
-
             return totalSize;
         }
 
         //Returns a string with the size of all files in a folder
-        public static string DisplayFolderSize( string folder )
+        public static void DisplayFolderSize( string folder )
         {
             string[] sizeSuffixes = { " b", " KB", " MB", " GB", " TB", " PB", " EB" };
             DirectoryInfo dirInfo = new DirectoryInfo( folder );
             long totalSize = 0;
             totalSize = CalculateFolderSize( dirInfo );
-
-
             //byte=0, Kb=1, Mb=2 ...
             int magnitude = (int)Math.Log( totalSize, 1024 );
-
             decimal adjustedSize = (decimal)totalSize / (1L << (magnitude * 10));
 
             if (magnitude < 0)
             {
                 magnitude = 0;
             }
-
-            return string.Format( "{0,0}{1,-8}", Math.Round( adjustedSize, 1 ), sizeSuffixes[magnitude] );
+            string folderSize = string.Format( "{0,0}{1,-8}", Math.Round( adjustedSize, 1 ), sizeSuffixes[magnitude] );
+            if (State.activeScreen == (int)State.screens.INFO)
+            {
+                Console.SetCursorPosition( 0, Console.WindowTop + 6 );
+                Console.WriteLine( "{0,-21}{1,0}", "  Size: ", folderSize + "       \n" );
+            }
+            Thread.CurrentThread.Abort();
         }
 
         public static void CopySelection( string item )
@@ -105,7 +101,8 @@ namespace FileScout
                 State.cursorPosY++;
                 ConsoleDisplay.MoveDown();
             }
-            if (!selectionRegister.Contains(item)) {
+            if (!selectionRegister.Contains( item ))
+            {
                 selectionRegister.Add( item );
                 Console.SetCursorPosition( 0, 0 );
                 Console.Write( "Added " );
@@ -138,8 +135,8 @@ namespace FileScout
                     foreach (DirectoryInfo item in subDirectories)
                     {
                         string name = item.Name;
-                        string dest = Path.Combine(destDirectory, name);
-                        CopyDirectory( item.FullName, dest);
+                        string dest = Path.Combine( destDirectory, name );
+                        CopyDirectory( item.FullName, dest );
                     }
                 }
             }
@@ -169,8 +166,9 @@ namespace FileScout
                         }
                     }
                 }
-                else {
-                    DisplayError(new Exception("Nothing to paste"));
+                else
+                {
+                    DisplayError( new Exception( "Nothing to paste" ) );
                 }
                 selectionRegister.Clear();
             }
@@ -180,6 +178,25 @@ namespace FileScout
             }
         }
 
+        public static void DebugWindow()
+        {
+            Console.Clear();
+            Console.WriteLine( "****DEBUG****\n\n" );
+            Console.WriteLine( "State.activeScreen: " + State.activeScreen + "\n" );
+            Console.WriteLine( "ConsoleDisplay.files: " );
+            for (int i = 0; i < ConsoleDisplay.files.Length; i++)
+            {
+                Console.WriteLine( ConsoleDisplay.files[i] );
+            }
+            Console.WriteLine( "\nselectedFile: " + ConsoleDisplay.selectedFile );
+            Console.WriteLine( "\nState.CursorPosY: " + State.cursorPosY );
+            Console.WriteLine( "\nState.currentPath: " + State.currentPath );
+            Console.WriteLine( "\nState.findKeyMatches" );
+            State.findKeyMatches.ForEach( ( x ) => Console.WriteLine( x ) );
+            Console.ReadKey( true );
+            ConsoleDisplay.Display();
+        }
+
         //To be used on a catch block
         public static void DisplayError( Exception e )
         {
@@ -187,7 +204,7 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
-            Console.Write( "(!) " + e.Message);
+            Console.Write( "(!) " + e.Message );
             Console.ResetColor();
             Console.ReadKey( true );
             ConsoleDisplay.ClearLine( Console.WindowTop );

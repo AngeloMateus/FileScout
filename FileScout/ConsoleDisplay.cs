@@ -24,6 +24,7 @@ namespace FileScout
         //Display Current Directory, files and folders and selected file
         public static void Display()
         {
+            State.activeScreen = (int)State.screens.FILESYSTEM;
             Console.Clear();
             Console.SetCursorPosition( 0, 0 );
             Console.CursorVisible = false;

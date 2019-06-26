@@ -10,6 +10,7 @@ namespace FileScout
     {
         public void CommadMode()
         {
+            Console.CursorVisible = true;
             ConsoleDisplay.ClearLine( Console.WindowTop );
             Console.SetCursorPosition( 0, Console.WindowTop );
 
@@ -21,31 +22,6 @@ namespace FileScout
 
             //Add all commands to an array if command isnt found display "Command Not Found"
             string[] commands = new string[] { "q", "c", "p", "x", "v" };
-
-            bool commandExists = true;
-
-            for (int i = 0; i < commands.Length; i++)
-            {
-                if (command.ToLower().Equals( commands[i].ToLower() ))
-                {
-                    commandExists = true;
-                    break;
-                }
-                else
-                {
-                    commandExists = false;
-                }
-            }
-            /*
-            if (!commandExists && command != String.Empty)
-            {
-                Console.ForegroundColor = ConsoleColor.DarkRed;
-                Console.SetCursorPosition( 0, Console.WindowTop );
-                Console.WriteLine( "Command not found." );
-                Console.ResetColor();
-                Thread.Sleep( 260 );
-            }
-            */
 
             switch (command.ToLower())
             {
@@ -107,6 +83,7 @@ namespace FileScout
                     break;
             }
             ConsoleDisplay.ClearLine( Console.WindowTop );
+            Console.CursorVisible = false;
         }
 
         public void SearchMode()

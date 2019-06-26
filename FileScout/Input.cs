@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Threading;
 
 namespace FileScout
 {
@@ -230,7 +231,7 @@ namespace FileScout
                         break;
                     case 'z':
                         {
-                            DebugWindow();
+                            Tools.DebugWindow();
                         }
                         break;
                 }
@@ -280,24 +281,6 @@ namespace FileScout
             {
                 Tools.DisplayError( e );
             }
-        }
-
-        private void DebugWindow()
-        {
-            Console.Clear();
-            Console.WriteLine( "****DEBUG****\n\n" );
-            Console.WriteLine( "ConsoleDisplay.files: " );
-            for (int i = 0; i < ConsoleDisplay.files.Length; i++)
-            {
-                Console.WriteLine( ConsoleDisplay.files[i] );
-            }
-            Console.WriteLine( "\nselectedFile: " + ConsoleDisplay.selectedFile );
-            Console.WriteLine( "\nState.CursorPosY: " + State.cursorPosY );
-            Console.WriteLine( "\nState.currentPath: " + State.currentPath );
-            Console.WriteLine( "\nState.findKeyMatches"  );
-            State.findKeyMatches.ForEach( ( x ) => Console.WriteLine( x ) );
-            Console.ReadKey( true );
-            ConsoleDisplay.Display();
         }
     }
 }
