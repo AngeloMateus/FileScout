@@ -52,7 +52,6 @@ namespace FileScout
 
             Console.SetCursorPosition( 0, 14 );
             Console.WriteLine( "  (c)opy full path to clipboard" );
-            Console.WriteLine( Process.GetCurrentProcess().Threads.Count);
             ConsoleKeyInfo key = Console.ReadKey( true );
 
             if (key.KeyChar == 'c')

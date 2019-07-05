@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
-using System.Threading.Tasks;
 
 namespace FileScout
 {
@@ -47,6 +46,10 @@ namespace FileScout
         private static long CalculateFolderSize( DirectoryInfo dir )
         {
             long totalSize = 0;
+            if (State.activeScreen != (int)State.screens.INFO)
+            {
+                Thread.CurrentThread.Abort();
+            }
             try
             {
                 IEnumerable<DirectoryInfo> dirInfos = dir.EnumerateDirectories();
@@ -104,7 +107,7 @@ namespace FileScout
             if (!selectionRegister.Contains( item ))
             {
                 selectionRegister.Add( item );
-                Console.SetCursorPosition( 0, 0 );
+                Console.SetCursorPosition( 0, Console.WindowTop );
                 Console.Write( "Added " );
                 Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Gray;
                 Console.Write( Path.GetFileName( item ) );
