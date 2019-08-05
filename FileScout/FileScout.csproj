@@ -153,7 +153,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties VsiEnabled="True" VsiAutoVersion="DoNothing.Increment.YearDayOfYear.TimeStamp" VsiAutoFileVersion="DoNothing.Increment.YearDayOfYear.TimeStamp" VsiAutoInformationalVersion="DoNothing.Increment.YearDayOfYear.TimeStamp" VsiConfigurationBuildAction="True.True.True.True.False.False" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="24/04/2019 14:47:47" VsiUseTimeUtc="False" VsiSettingsState="Initialized" />
+      <UserProperties VsiCustomProjectConfig0="x64;False" VsiSettingsState="Initialized" VsiUseTimeUtc="False" VsiDeltaBaseDate="24/04/2019 14:47:47" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="True.True.True.True.False.False" VsiAutoInformationalVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoFileVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiEnabled="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
