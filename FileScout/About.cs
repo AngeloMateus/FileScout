@@ -15,9 +15,7 @@ namespace FileScout
             List<string> doList = new List<string>();
 
             doList.Add( "On rename/newfile/newfolder change cursor position to the file to alter and rename from there" );
-            doList.Add( "Send environment variables via InputBox (might not be  agood idea)" );
             doList.Add( "Add TAB auto-complete for : commands" );
-            doList.Add( "Option to open new cmd without starting new window" );
             doList.Add( "Search child directories WITH REGEX!" );
             doList.Add( "Optimize scrolling through long directories (maybe by not iterating through array with each setCursorPosition)" );
             doList.Add( "File/Dir Selection via space" );
@@ -28,13 +26,12 @@ namespace FileScout
             doList.Add( "Create :help window to remind myself of the commands" );
             doList.Add( "Folder Marks: ' to view all marks in `Marks` screen; m to mark a location with prompt to name location; ' + d to delete mark" );
             doList.Add( "Color coding for Folder Marks" );
-            doList.Add( "Make calculating size when pressing i async" );
+            doList.Add( "Make folder deletion create a new top level thread" );
             doList.Add( "\n" );
             doList.Add( "TO FIX:\n" );
             doList.Add( "Fix flickering path when scrolling long directories" );
             doList.Add( "Fix treversing directories - UnauthorizedAccessException - when pressing i" );
             doList.Add( "Fix `i` File Size not displaying correct Size on large files" );
-            doList.Add( "Creating a new folder in a dir with a file of the same name throws and error" );
             doList.Add( "Creating new file or folder needs to set cursor to position of new file or folder" );
 
             Console.WriteLine( new string( '*', Console.WindowWidth ) );

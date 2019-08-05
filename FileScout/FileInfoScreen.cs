@@ -30,7 +30,7 @@ namespace FileScout
                 Console.WriteLine( "{0,-21}{1,0}", "  Full Path: ", file );
                 Console.WriteLine( "{0,-21}{1,0}", "  Size: ", "Calculating..." );
 
-                Thread fsThread = new Thread(() => Tools.DisplayFolderSize(file));
+                Thread fsThread = new Thread(() => { Tools.DisplayFolderSize( file ); } );
                 fsThread.Start();
 
                 Console.WriteLine( "{0,-21}{1,0}", "  Last Modified: ", Directory.GetLastWriteTime( file ) );

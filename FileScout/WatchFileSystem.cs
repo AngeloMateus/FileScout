@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using System.Security.Permissions;
+using System.Threading;
 
 namespace FileScout
 {
@@ -22,7 +23,7 @@ namespace FileScout
 
             watcher.Changed += new FileSystemEventHandler( WatcherChanged );
             watcher.Created += new FileSystemEventHandler( WatcherChanged );
-            watcher.Deleted += new FileSystemEventHandler( WatcherChanged );
+            watcher.Deleted += new FileSystemEventHandler( WatcherDeletedFile );
             watcher.Renamed += new RenamedEventHandler( WatcherChanged );
 
             watcher.EnableRaisingEvents = true;
@@ -37,7 +38,17 @@ namespace FileScout
         private void WatcherChanged( object sender, FileSystemEventArgs e )
         {
             if (State.isWatching)
+            {
                 ConsoleDisplay.Display();
+            }
+        }
+        private void WatcherDeletedFile( object sender, FileSystemEventArgs e )
+        {
+            if (State.isWatching)
+            {
+                ConsoleDisplay.selectedFile = null;
+                ConsoleDisplay.Display();
+            }
         }
 
     }

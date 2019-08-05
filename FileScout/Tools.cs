@@ -196,6 +196,8 @@ namespace FileScout
             Console.WriteLine( "\nState.currentPath: " + State.currentPath );
             Console.WriteLine( "\nState.findKeyMatches" );
             State.findKeyMatches.ForEach( ( x ) => Console.WriteLine( x ) );
+            Console.WriteLine( "\nBuffers H - W" );
+            Console.WriteLine( Console.BufferHeight + " - " + Console.BufferWidth );
             Console.ReadKey( true );
             ConsoleDisplay.Display();
         }
@@ -208,6 +210,7 @@ namespace FileScout
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write( "(!) " + e.Message );
+            Console.Write( "(!) " + e );
             Console.ResetColor();
             Console.ReadKey( true );
             ConsoleDisplay.ClearLine( Console.WindowTop );

@@ -21,7 +21,7 @@ namespace FileScout
             string command = Console.ReadLine();
 
             //Add all commands to an array if command isnt found display "Command Not Found"
-            string[] commands = new string[] { "q", "c", "p", "x", "v" };
+            string[] commands = new string[] { "q", "c", "p", "x", "v", "preview" };
 
             switch (command.ToLower())
             {
@@ -69,11 +69,16 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
+                case "P":
+                    {
+                        new FilePreview();
+                    }
+                    break;
                 default:
                     {
                         try
                         {
-                            new ChildProcess(command);
+                            new ChildProcess( command );
                         }
                         catch (Exception e)
                         {
@@ -164,8 +169,9 @@ namespace FileScout
         }
 
         //renames 'file' in the argument list to 'line'
-        public void RenameFile( string file )
+        public void RenameFile()
         {
+            string file = ConsoleDisplay.selectedFile;
             string oldFile = file;
             ConsoleDisplay.ClearLine( Console.WindowTop );
             Console.SetCursorPosition( 0, Console.WindowTop );

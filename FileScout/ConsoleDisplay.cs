@@ -20,7 +20,6 @@ namespace FileScout
             writer.AutoFlush = false;
         }
 
-
         //Display Current Directory, files and folders and selected file
         public static void Display()
         {
@@ -96,8 +95,8 @@ namespace FileScout
             WriteCurrentPath();
 
             new ConsoleDisplayChild();
+            //new FilePreview();
         }
-
 
         private static void SetCursorToPreviousPosition()
         {
@@ -145,7 +144,6 @@ namespace FileScout
         {
             Console.CursorVisible = false;
 
-
             FileAttributes attr = File.GetAttributes( files[State.cursorPosY - 1] );
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
@@ -178,6 +176,7 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
             new ConsoleDisplayChild();
+            //new FilePreview();
         }
 
         public static void MoveUp()
@@ -216,6 +215,7 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
             new ConsoleDisplayChild();
+            //new FilePreview();
 
         }
 

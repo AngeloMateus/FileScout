@@ -161,7 +161,7 @@ namespace FileScout
                         break;
                     case 'r':
                         {
-                            new InputBox().RenameFile( selectedFile );
+                            new InputBox().RenameFile();
                         }
                         break;
                     case 's':
