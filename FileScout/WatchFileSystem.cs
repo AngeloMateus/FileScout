@@ -1,6 +1,7 @@
 ﻿using System.IO;
 using System.Security.Permissions;
 using System.Threading;
+using System;
 
 namespace FileScout
 {
@@ -15,16 +16,17 @@ namespace FileScout
 
             watcher.Path = State.currentPath;
             watcher.NotifyFilter = NotifyFilters.LastAccess
-                     | NotifyFilters.LastWrite
-                     | NotifyFilters.FileName
-                     | NotifyFilters.DirectoryName;
+                                 | NotifyFilters.LastWrite
+                                 | NotifyFilters.FileName
+                                 | NotifyFilters.DirectoryName
+                                 | NotifyFilters.Size;
 
             watcher.Filter = "*";
 
             watcher.Changed += new FileSystemEventHandler( WatcherChanged );
-            watcher.Created += new FileSystemEventHandler( WatcherChanged );
-            watcher.Deleted += new FileSystemEventHandler( WatcherDeletedFile );
             watcher.Renamed += new RenamedEventHandler( WatcherChanged );
+            watcher.Created += new FileSystemEventHandler( WatcherCreatedFile );
+            watcher.Deleted += new FileSystemEventHandler( WatcherDeletedFile );
 
             watcher.EnableRaisingEvents = true;
 
@@ -41,12 +43,26 @@ namespace FileScout
             {
                 ConsoleDisplay.Display();
             }
+            else
+            {
+                Console.WriteLine( e.FullPath );
+            }
+        }
+        private void WatcherCreatedFile( object sender, FileSystemEventArgs e )
+        {
+            if (State.isWatching)
+            {
+                ConsoleDisplay.files = ConsoleDisplay.CombineArrays( State.currentPath );
+                State.cursorPosY = Array.IndexOf( ConsoleDisplay.files, e.FullPath );
+                State.selectedFile = e.FullPath;
+                ConsoleDisplay.Display();
+            }
         }
         private void WatcherDeletedFile( object sender, FileSystemEventArgs e )
         {
             if (State.isWatching)
             {
-                ConsoleDisplay.selectedFile = null;
+                State.selectedFile = null;
                 ConsoleDisplay.Display();
             }
         }

@@ -42,9 +42,9 @@ Type `:` to input commands.
 
 `d` deletes a file or folder
 
-`c` adds a file or folder to the selection list
+`y` adds a file or folder to the copy list
 
-`p` paste all files in current directory and clear selection list
+`p` paste all files in current directory and clear copy list
 
 
 #### - Other Buttons

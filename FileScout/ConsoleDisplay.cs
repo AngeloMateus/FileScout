@@ -12,7 +12,6 @@ namespace FileScout
         private static string parentDirectory;
         private static StreamWriter writer;
         private static readonly int topPadding = 5;
-        public static string selectedFile;
 
         static ConsoleDisplay()
         {
@@ -39,23 +38,25 @@ namespace FileScout
                 Console.SetCursorPosition( 0, Console.WindowTop + 5 );
 
                 if (Tools.IsEmpty( files ))
-                    writer.WriteLine("    (empty)");
+                    writer.WriteLine( "    (empty)" );
                 //Output all files and folders
                 for (int i = 0; i < files.Length; i++)
                 {
+                    string s;
+                    if (Tools.selectionRegister.Contains( files[i] )) { s = "C"; } else { s = " "; };
                     if (State.cursorPosY == i)
                     {
                         FileAttributes attr = File.GetAttributes( files[i] );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
-                            selectedFile = Path.GetFullPath( files[i] );
+                            writer.WriteLine( " ->" + s + "> " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
+                            State.selectedFile = Path.GetFullPath( files[i] );
                         }
                         else
                         {
-                            writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
+                            writer.WriteLine( " ->" + s + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
                                 + Path.GetExtension( files[i] ), Tools.DisplayFileSize( files[i] ) );
-                            selectedFile = Path.GetFullPath( files[i] );
+                            State.selectedFile = Path.GetFullPath( files[i] );
                         }
                     }
                     else if (State.cursorPosY != i)
@@ -63,12 +64,11 @@ namespace FileScout
                         FileAttributes attr = File.GetAttributes( files[i] );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            writer.WriteLine( "    > " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
-
+                            writer.WriteLine( "   " + s + "> " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
                         }
                         else
                         {
-                            writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
+                            writer.WriteLine( "   " + s + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
                                 + Path.GetExtension( files[i] ), Tools.DisplayFileSize( files[i] ) );
                         }
                     }
@@ -77,12 +77,12 @@ namespace FileScout
             }
             catch (UnauthorizedAccessException)
             {
-  
+
                 Console.Clear();
                 SetCursorToPreviousPosition();
                 State.currentPath = Directory.GetParent( State.currentPath ).ToString();
                 Display();
-                Tools.DisplayError(new Exception("Access Denied"));
+                Tools.DisplayError( new Exception( "Access Denied" ) );
 
             }
 
@@ -140,18 +140,42 @@ namespace FileScout
             }
         }
 
+        public static void RedrawSelectedFile()
+        {
+            Console.SetCursorPosition( 0, topPadding + State.cursorPosY );
+            FileAttributes attr = File.GetAttributes( State.selectedFile );
+
+            string s;
+            if (Tools.selectionRegister.Contains( State.selectedFile )) { s = "C"; } else { s = " "; };
+
+            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            {
+                writer.WriteLine( " ->" + s + "> " + ShortenFileName( Path.GetFileName( State.selectedFile ), 26 ) + "\\" );
+                State.selectedFile = Path.GetFullPath( State.selectedFile );
+            }
+            else
+            {
+                writer.WriteLine( " ->" + s + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( State.selectedFile ), 26 )
+                    + Path.GetExtension( State.selectedFile ), Tools.DisplayFileSize( State.selectedFile ) );
+                State.selectedFile = Path.GetFullPath( State.selectedFile );
+            }
+            writer.Flush();
+        }
+
         public static void MoveDown()
         {
             Console.CursorVisible = false;
+            string s;
+            if (Tools.selectionRegister.Contains( State.selectedFile )) { s = "C"; } else { s = " "; };
 
             FileAttributes attr = File.GetAttributes( files[State.cursorPosY - 1] );
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                writer.WriteLine( "    > " + ShortenFileName( Path.GetFileName( files[State.cursorPosY - 1] ), 26 ) + "\\" );
+                writer.WriteLine( "   " + s + "> " + ShortenFileName( Path.GetFileName( files[State.cursorPosY - 1] ), 26 ) + "\\" );
             }
             else
             {
-                writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY - 1] ), 26 )
+                writer.WriteLine( "   " + s + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY - 1] ), 26 )
                     + Path.GetExtension( files[State.cursorPosY - 1] ), Tools.DisplayFileSize( files[State.cursorPosY - 1] ) );
             }
 
@@ -159,13 +183,13 @@ namespace FileScout
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
                 writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileName( files[State.cursorPosY] ), 26 ) + "\\" );
-                selectedFile = Path.GetFullPath( files[State.cursorPosY] );
+                State.selectedFile = Path.GetFullPath( files[State.cursorPosY] );
             }
             else
             {
                 writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY] ), 26 )
                     + Path.GetExtension( files[State.cursorPosY] ), Tools.DisplayFileSize( files[State.cursorPosY] ) );
-                selectedFile = Path.GetFullPath( files[State.cursorPosY] );
+                State.selectedFile = Path.GetFullPath( files[State.cursorPosY] );
             }
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, State.cursorPosY + topPadding - 1 );
@@ -177,34 +201,39 @@ namespace FileScout
             WriteCurrentPath();
             new ConsoleDisplayChild();
             //new FilePreview();
+            if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
         }
 
         public static void MoveUp()
         {
             Console.CursorVisible = false;
-            Console.SetCursorPosition( 0, State.cursorPosY + topPadding  );
+            Console.SetCursorPosition( 0, State.cursorPosY + topPadding );
+
+            string s;
+            if (Tools.selectionRegister.Contains( files[State.cursorPosY] )) { s = "C"; } else { s = " "; };
 
             FileAttributes attr = File.GetAttributes( files[State.cursorPosY] );
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileName( files[State.cursorPosY] ), 26 ) + "\\" );
-                selectedFile = Path.GetFullPath( files[State.cursorPosY] );
+                writer.WriteLine( " ->" + s + "> " + ShortenFileName( Path.GetFileName( files[State.cursorPosY] ), 26 ) + "\\" );
+                State.selectedFile = Path.GetFullPath( files[State.cursorPosY] );
             }
             else
             {
-                writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY] ), 26 )
+                writer.WriteLine( " ->" + s + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY] ), 26 )
                     + Path.GetExtension( files[State.cursorPosY] ), Tools.DisplayFileSize( files[State.cursorPosY] ) );
-                selectedFile = Path.GetFullPath( files[State.cursorPosY] );
+                State.selectedFile = Path.GetFullPath( files[State.cursorPosY] );
             }
 
+            if (Tools.selectionRegister.Contains( files[State.cursorPosY + 1] )) { s = "C"; } else { s = " "; };
             attr = File.GetAttributes( files[State.cursorPosY + 1] );
             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
             {
-                writer.WriteLine( "    > " + ShortenFileName( Path.GetFileName( files[State.cursorPosY + 1] ), 26 ) + "\\" );
+                writer.WriteLine( "   " + s + "> " + ShortenFileName( Path.GetFileName( files[State.cursorPosY + 1] ), 26 ) + "\\" );
             }
             else
             {
-                writer.WriteLine( "    {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY + 1] ), 26 )
+                writer.WriteLine( "   " + s + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY + 1] ), 26 )
                     + Path.GetExtension( files[State.cursorPosY + 1] ), Tools.DisplayFileSize( files[State.cursorPosY + 1] ) );
             }
             writer.Flush();
@@ -216,7 +245,7 @@ namespace FileScout
             WriteCurrentPath();
             new ConsoleDisplayChild();
             //new FilePreview();
-
+            if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
         }
 
         private static void WriteCurrentPath()

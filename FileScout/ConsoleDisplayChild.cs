@@ -14,18 +14,16 @@ namespace FileScout
             {
                 Console.SetCursorPosition( 60, Console.WindowTop + 5 + i );
                 Console.Write( new string( ' ', Console.WindowWidth - 64 ) );
-
             }
-
             try
             {
-                if (ConsoleDisplay.selectedFile != null)
+                if ( State.selectedFile != null)
                 {
-                    FileAttributes attr = File.GetAttributes( ConsoleDisplay.selectedFile );
+                    FileAttributes attr = File.GetAttributes( State.selectedFile );
 
                     if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                     {
-                        childFiles = ConsoleDisplay.CombineArrays( ConsoleDisplay.selectedFile );
+                        childFiles = ConsoleDisplay.CombineArrays( State.selectedFile );
                         for (int i = 0; i < childFiles.Length; i++)
                         {
                             Console.SetCursorPosition( 60, Console.WindowTop + 5 + i );
@@ -63,7 +61,7 @@ namespace FileScout
                                 }
                             }
                         }
-                        if (childFiles.Length == 0 && ConsoleDisplay.selectedFile != State.currentPath)
+                        if (childFiles.Length == 0 && State.selectedFile != State.currentPath)
                         {
                             Console.SetCursorPosition( 66, Console.WindowTop + 5 );
                             Console.Write( "(empty)" );

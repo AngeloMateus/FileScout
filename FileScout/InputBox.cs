@@ -69,7 +69,7 @@ namespace FileScout
                         ConsoleDisplay.Display();
                     }
                     break;
-                case "P":
+                case "m":
                     {
                         new FilePreview();
                     }
@@ -171,7 +171,7 @@ namespace FileScout
         //renames 'file' in the argument list to 'line'
         public void RenameFile()
         {
-            string file = ConsoleDisplay.selectedFile;
+            string file = State.selectedFile;
             string oldFile = file;
             ConsoleDisplay.ClearLine( Console.WindowTop );
             Console.SetCursorPosition( 0, Console.WindowTop );
@@ -216,7 +216,6 @@ namespace FileScout
                 if (file != String.Empty && !Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
                 {
                     Directory.CreateDirectory( State.currentPath + Path.DirectorySeparatorChar + file );
-                    State.cursorPosY = 0;
                 }
                 else if (Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
                 {
@@ -247,14 +246,14 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             Console.Write( "NEW file: " );
             string file = Console.ReadLine();
+            file = State.currentPath + Path.DirectorySeparatorChar + file;
 
             try
             {
-                if (file != String.Empty && !File.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
+                if (file != String.Empty && !File.Exists( file ))
                 {
-                    FileStream fs = File.Create( State.currentPath + Path.DirectorySeparatorChar + file );
+                    FileStream fs = File.Create( file );
                     fs.Close();
-                    State.cursorPosY = 0;
                 }
                 else if (File.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
                 {
@@ -324,8 +323,8 @@ namespace FileScout
                 {
                     if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
                     {
+                        State.selectedFile = null;
                         File.Delete( file );
-                        ConsoleDisplay.selectedFile = null;
 
                         if (State.cursorPosY > 0)
                             State.cursorPosY = State.cursorPosY - 1;
@@ -355,7 +354,7 @@ namespace FileScout
                 if (State.cursorPosY > 0)
                     State.cursorPosY = State.cursorPosY - 1;
                 if (State.cursorPosY == 0)
-                    ConsoleDisplay.selectedFile = State.currentPath;
+                    State.selectedFile = State.currentPath;
             }
             else
             {
@@ -377,7 +376,7 @@ namespace FileScout
                 if (State.cursorPosY > 0)
                     State.cursorPosY = State.cursorPosY - 1;
                 if (State.cursorPosY == 0)
-                    ConsoleDisplay.selectedFile = State.currentPath;
+                    State.selectedFile = State.currentPath;
             }
             else
             {

@@ -8,7 +8,6 @@ namespace FileScout
 {
     class Input
     {
-        string selectedFile;
         string[] currentFileList;
         string parentDirectory;
 
@@ -29,7 +28,7 @@ namespace FileScout
                 string[] directoryArray = ConsoleDisplay.files;
 
                 if (!directoryArray.IsEmpty())
-                    selectedFile = directoryArray[State.cursorPosY];
+                    State.selectedFile = directoryArray[State.cursorPosY];
 
                 //Read key to change cursor
                 consoleKeyInfo = Console.ReadKey( true );
@@ -52,11 +51,11 @@ namespace FileScout
                     case ConsoleKey.RightArrow:
                         {
                             //If it it's a folder allow press right key
-                            FileAttributes attr = File.GetAttributes( selectedFile );
+                            FileAttributes attr = File.GetAttributes( State.selectedFile );
 
                             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                             {
-                                State.currentPath = selectedFile;
+                                State.currentPath = State.selectedFile;
                                 History.SetPointer();
                                 ConsoleDisplay.Display();
                             }
@@ -99,11 +98,11 @@ namespace FileScout
                     case 'l':
                         {
                             //If it it's a folder allow press right key
-                            FileAttributes attr = File.GetAttributes( selectedFile );
+                            FileAttributes attr = File.GetAttributes( State.selectedFile );
 
                             if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                             {
-                                State.currentPath = selectedFile;
+                                State.currentPath = State.selectedFile;
                                 History.SetPointer();
                                 ConsoleDisplay.Display();
                             }
@@ -181,8 +180,8 @@ namespace FileScout
                         break;
                     case 'd':
                         {
-                            if (selectedFile != State.currentPath)
-                                new InputBox().DeleteFileWithPrompt( selectedFile );
+                            if (State.selectedFile != State.currentPath)
+                                new InputBox().DeleteFileWithPrompt( State.selectedFile );
                         }
                         break;
                     case ' ':
@@ -216,17 +215,33 @@ namespace FileScout
                         break;
                     case 'i':
                         {
-                            new FileInfoScreen( selectedFile );
+                            new FileInfoScreen( State.selectedFile );
                         }
                         break;
                     case 'c':
                         {
-                            Tools.CopySelection( selectedFile );
+                            if (Tools.selectionRegister.Contains( State.selectedFile ))
+                            {
+                                Tools.RemoveFromSelectionRegister( State.selectedFile );
+                                //move down if possible
+                                if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
+                                {
+                                    State.cursorPosY++;
+                                    ConsoleDisplay.MoveDown();
+                                }
+                            }
+                            else
+                            {
+                                Tools.CopySelection( State.selectedFile );
+                            }
                         }
                         break;
                     case 'p':
                         {
+                            State.isWatching = false;
                             Tools.PasteSelection();
+                            State.isWatching = true;
+                            ConsoleDisplay.Display();
                         }
                         break;
                     case 'z':
@@ -273,7 +288,7 @@ namespace FileScout
             try
             {
                 ProcessStartInfo startInfo = new ProcessStartInfo();
-                startInfo.FileName = @selectedFile;
+                startInfo.FileName = @State.selectedFile;
                 startInfo.RedirectStandardOutput = false;
                 Process newProcess = Process.Start( startInfo );
             }

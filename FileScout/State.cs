@@ -9,6 +9,8 @@ namespace FileScout
 
         public static char currentFindKey;
 
+        public static string selectedFile;
+
         public static bool isWatching = true;
 
         public static int currentFindKeyPosition;
@@ -16,6 +18,7 @@ namespace FileScout
 
         public static int activeScreen;
 
-        public enum screens {FILESYSTEM, ABOUT, INFO};
+
+        public enum screens { FILESYSTEM, ABOUT, INFO };
     }
 }

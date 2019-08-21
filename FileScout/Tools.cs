@@ -96,23 +96,32 @@ namespace FileScout
             Thread.CurrentThread.Abort();
         }
 
+        public static void RemoveFromSelectionRegister( string item )
+        {
+            selectionRegister.Remove( item );
+            ConsoleDisplay.RedrawSelectedFile();
+        }
+
         public static void CopySelection( string item )
         {
-            //move down if possible
-            if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
-            {
-                State.cursorPosY++;
-                ConsoleDisplay.MoveDown();
-            }
             if (!selectionRegister.Contains( item ))
             {
                 selectionRegister.Add( item );
+                ConsoleDisplay.RedrawSelectedFile();
+                //move down if possible
+                if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
+                {
+                    State.cursorPosY++;
+                    ConsoleDisplay.MoveDown();
+                }
+
                 Console.SetCursorPosition( 0, Console.WindowTop );
                 Console.Write( "Added " );
                 Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Gray;
                 Console.Write( Path.GetFileName( item ) );
                 Console.ResetColor();
                 Console.Write( " to Selection." );
+
             }
         }
 
@@ -191,7 +200,7 @@ namespace FileScout
             {
                 Console.WriteLine( ConsoleDisplay.files[i] );
             }
-            Console.WriteLine( "\nselectedFile: " + ConsoleDisplay.selectedFile );
+            Console.WriteLine( "\nselectedFile: " + State.selectedFile );
             Console.WriteLine( "\nState.CursorPosY: " + State.cursorPosY );
             Console.WriteLine( "\nState.currentPath: " + State.currentPath );
             Console.WriteLine( "\nState.findKeyMatches" );
