@@ -43,10 +43,7 @@ namespace FileScout
             {
                 ConsoleDisplay.Display();
             }
-            else
-            {
-                Console.WriteLine( e.FullPath );
-            }
+
         }
         private void WatcherCreatedFile( object sender, FileSystemEventArgs e )
         {

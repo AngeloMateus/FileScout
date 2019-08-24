@@ -287,6 +287,7 @@ namespace FileScout
                 if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
                 {
                     File.Delete( file );
+                    Console.WriteLine( "Deleted: " + file );
                 }
                 else if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                 {
@@ -325,6 +326,7 @@ namespace FileScout
                     {
                         State.selectedFile = null;
                         File.Delete( file );
+                        Console.WriteLine( "Deleted: " + file );
 
                         if (State.cursorPosY > 0)
                             State.cursorPosY = State.cursorPosY - 1;
@@ -391,11 +393,13 @@ namespace FileScout
 
                 if (cki.KeyChar == 'y')
                 {
+                    Console.Clear();
                     foreach (String child in children)
                     {
                         DeleteFile( child );
                     }
                     Directory.Delete( folder );
+                    Console.WriteLine( " Deleted: " + folder );
                     State.cursorPosY = 0;
                 }
                 else

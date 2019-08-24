@@ -253,9 +253,9 @@ namespace FileScout
             string shortenedPath = ShortenPath( State.currentPath );
 
             if (Console.WindowTop != 0)
-                writer.Write( "\n\n ^ " + shortenedPath + "\n   " );
+                writer.Write( "\n\n ^    " + shortenedPath + "\n      " );
             else
-                writer.Write( "\n\n   " + shortenedPath + "\n   " );
+                writer.Write( "\n\n      " + shortenedPath + "\n      " );
 
 
             for (int i = 0; i < shortenedPath.Length; i++)

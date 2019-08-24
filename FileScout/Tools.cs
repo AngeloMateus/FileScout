@@ -102,14 +102,14 @@ namespace FileScout
             ConsoleDisplay.RedrawSelectedFile();
         }
 
-        public static void CopySelection( string item )
+        public static void CopySelection( string item, bool moveDown )
         {
             if (!selectionRegister.Contains( item ))
             {
                 selectionRegister.Add( item );
                 ConsoleDisplay.RedrawSelectedFile();
                 //move down if possible
-                if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
+                if (State.cursorPosY < ConsoleDisplay.files.Length - 1 && moveDown)
                 {
                     State.cursorPosY++;
                     ConsoleDisplay.MoveDown();
@@ -224,6 +224,11 @@ namespace FileScout
             Console.ReadKey( true );
             ConsoleDisplay.ClearLine( Console.WindowTop );
             ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
+        }
+
+        public static void popUp()
+        {
+
         }
     }
 }

@@ -181,7 +181,14 @@ namespace FileScout
                     case 'd':
                         {
                             if (State.selectedFile != State.currentPath)
+                            {
+                                State.isWatching = false;
+                                Console.Clear();
                                 new InputBox().DeleteFileWithPrompt( State.selectedFile );
+                                Console.ReadKey( true );
+                                State.isWatching = true;
+                                ConsoleDisplay.Display();
+                            }
                         }
                         break;
                     case ' ':
@@ -218,7 +225,7 @@ namespace FileScout
                             new FileInfoScreen( State.selectedFile );
                         }
                         break;
-                    case 'c':
+                    case 'y':
                         {
                             if (Tools.selectionRegister.Contains( State.selectedFile ))
                             {
@@ -232,16 +239,34 @@ namespace FileScout
                             }
                             else
                             {
-                                Tools.CopySelection( State.selectedFile );
+                                Tools.CopySelection( State.selectedFile, true );
+                            }
+                        }
+                        break;
+                    case 'Y':
+                        {
+                            if (Tools.selectionRegister.Contains( State.currentPath ))
+                            {
+                                Tools.RemoveFromSelectionRegister( State.currentPath );
+
+                                Console.SetCursorPosition( 0, Console.WindowTop );
+                                Console.Write( "Removed " );
+                                Console.ForegroundColor = ConsoleColor.Black; Console.BackgroundColor = ConsoleColor.Gray;
+                                Console.Write( Path.GetFileName( State.currentPath ) );
+                                Console.ResetColor();
+                                Console.Write( " from Selection." );
+                            }
+                            else
+                            {
+                                Tools.CopySelection( State.currentPath, false );
                             }
                         }
                         break;
                     case 'p':
                         {
-                            State.isWatching = false;
                             Tools.PasteSelection();
-                            State.isWatching = true;
                             ConsoleDisplay.Display();
+                            Console.ReadKey( true );
                         }
                         break;
                     case 'z':
