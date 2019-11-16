@@ -42,19 +42,19 @@ namespace FileScout
                 //Output all files and folders
                 for (int i = 0; i < files.Length; i++)
                 {
-                    string s;
-                    if (Tools.selectionRegister.Contains( files[i] )) { s = "C"; } else { s = " "; };
+                    string copiedIndicator;
+                    if (Tools.selectionRegister.Contains( files[i] )) { copiedIndicator = "C"; } else { copiedIndicator = " "; };
                     if (State.cursorPosY == i)
                     {
                         FileAttributes attr = File.GetAttributes( files[i] );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            writer.WriteLine( " ->" + s + "> " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
+                            writer.WriteLine( " ->" + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
                             State.selectedFile = Path.GetFullPath( files[i] );
                         }
                         else
                         {
-                            writer.WriteLine( " ->" + s + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
+                            writer.WriteLine( " ->" + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
                                 + Path.GetExtension( files[i] ), Tools.DisplayFileSize( files[i] ) );
                             State.selectedFile = Path.GetFullPath( files[i] );
                         }
@@ -64,11 +64,11 @@ namespace FileScout
                         FileAttributes attr = File.GetAttributes( files[i] );
                         if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
                         {
-                            writer.WriteLine( "   " + s + "> " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
+                            writer.WriteLine( "   " + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
                         }
                         else
                         {
-                            writer.WriteLine( "   " + s + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
+                            writer.WriteLine( "   " + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
                                 + Path.GetExtension( files[i] ), Tools.DisplayFileSize( files[i] ) );
                         }
                     }
@@ -77,13 +77,11 @@ namespace FileScout
             }
             catch (UnauthorizedAccessException)
             {
-
                 Console.Clear();
                 SetCursorToPreviousPosition();
                 State.currentPath = Directory.GetParent( State.currentPath ).ToString();
                 Display();
                 Tools.DisplayError( new Exception( "Access Denied" ) );
-
             }
 
             writer.Flush();
@@ -94,7 +92,7 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
 
-            new ConsoleDisplayChild();
+            if (Console.BufferWidth > 59) { new ConsoleDisplayChild(); }
             //new FilePreview();
         }
 
@@ -125,11 +123,14 @@ namespace FileScout
             return combinedDirectory;
         }
 
+        //Replaces specified line with empty spaces
         public static void ClearLine( int posY )
         {
             Console.SetCursorPosition( 0, posY );
             Console.Write( new string( ' ', Console.WindowWidth ) );
         }
+
+        //Replaces specified lines with empty spaces
         public static void ClearBlock( int start, int end )
         {
             while (start != end)
@@ -199,7 +200,7 @@ namespace FileScout
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
-            new ConsoleDisplayChild();
+            if (Console.BufferWidth > 59) { new ConsoleDisplayChild(); }
             //new FilePreview();
             if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
         }
@@ -243,7 +244,7 @@ namespace FileScout
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
-            new ConsoleDisplayChild();
+            if (Console.BufferWidth > 59) { new ConsoleDisplayChild(); }
             //new FilePreview();
             if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
         }

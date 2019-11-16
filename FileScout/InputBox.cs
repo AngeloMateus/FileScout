@@ -78,6 +78,7 @@ namespace FileScout
                     {
                         try
                         {
+                            Console.SetBufferSize( Console.WindowWidth, 999);
                             new ChildProcess( command );
                         }
                         catch (Exception e)
