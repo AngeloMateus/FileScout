@@ -1,4 +1,4 @@
 @echo off
 setlocal
-call "FileScout.exe"
+call "FileScout.exe" %1
 endlocal

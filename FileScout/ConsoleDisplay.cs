@@ -92,7 +92,7 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
 
-            if (Console.BufferWidth > 59) { new ConsoleDisplayChild(); }
+            if (Console.BufferWidth > 90) { new ConsoleDisplayChild(); }
             //new FilePreview();
         }
 
@@ -200,7 +200,7 @@ namespace FileScout
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
-            if (Console.BufferWidth > 59) { new ConsoleDisplayChild(); }
+            if (Console.BufferWidth > 90) { new ConsoleDisplayChild(); }
             //new FilePreview();
             if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
         }
@@ -244,7 +244,7 @@ namespace FileScout
             ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
             Console.SetCursorPosition( 0, Console.WindowTop );
             WriteCurrentPath();
-            if (Console.BufferWidth > 59) { new ConsoleDisplayChild(); }
+            if (Console.BufferWidth > 90) { new ConsoleDisplayChild(); }
             //new FilePreview();
             if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
         }

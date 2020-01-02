@@ -211,34 +211,27 @@ namespace FileScout
             Console.SetCursorPosition( 0, Console.WindowTop );
             Console.Write( "NEW folder: " );
             string file = Console.ReadLine();
+            if (file.IsEmpty())
+            {
+                ConsoleDisplay.Display();
+            } else { 
 
             try
             {
-                if (file != String.Empty && !Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
+                if( !Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
                 {
                     Directory.CreateDirectory( State.currentPath + Path.DirectorySeparatorChar + file );
                 }
-                else if (Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
+                else 
                 {
-                    ConsoleDisplay.ClearLine( Console.WindowTop );
-                    Console.SetCursorPosition( 0, Console.WindowTop );
-                    Console.BackgroundColor = ConsoleColor.Red;
-                    Console.ForegroundColor = ConsoleColor.White;
-                    Console.Write( "(!) Directory " + file + " already exists!" );
-                    Console.ResetColor();
-                    Console.ReadKey( true );
-                    ConsoleDisplay.ClearLine( Console.WindowTop );
-                    ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
-                }
-                else
-                {
-                    ConsoleDisplay.Display();
+                    throw new System.Exception("Directory " + file + " already exists!");
                 }
             }
             catch (Exception e)
             {
                 Tools.DisplayError( e );
             }
+           }
         }
 
         public void NewFile()
@@ -400,7 +393,7 @@ namespace FileScout
                         DeleteFile( child );
                     }
                     Directory.Delete( folder );
-                    Console.WriteLine( " Deleted: " + folder );
+                    Console.WriteLine( "Deleted: " + folder );
                     State.cursorPosY = 0;
                 }
                 else

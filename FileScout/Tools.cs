@@ -219,7 +219,6 @@ namespace FileScout
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write( "(!) " + e.Message );
-            Console.Write( "(!) " + e );
             Console.ResetColor();
             Console.ReadKey( true );
             ConsoleDisplay.ClearLine( Console.WindowTop );

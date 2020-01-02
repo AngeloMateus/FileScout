@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.Threading;
+using System.IO;
 
 namespace FileScout
 {
@@ -16,7 +17,24 @@ namespace FileScout
             Thread readInputThread = new Thread( new ThreadStart( readInput.StartReading ) );
             readInputThread.SetApartmentState( ApartmentState.STA );
 
-            State.currentPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
+            if (args.Length > 0)
+            {
+                Console.WriteLine( "Args: " + args[0] );
+                if (Directory.Exists( args[0] ))
+                {
+                    State.currentPath = Path.GetFullPath(args[0]);
+                }
+                else
+                {
+                    Console.WriteLine("Path does not exists.");
+                    return;
+                }
+            }
+            else
+            {
+                    State.currentPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
+            }
+
 
             //Watches for changes in filesystem and calls Display() when changes occur.
             new WatchFileSystem().CheckFiles();

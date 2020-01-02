@@ -22,7 +22,6 @@ namespace FileScout
             doList.Add( "Single file Cut/Copy" );
             doList.Add( "Multiple Selection Delete/Cut/Copy" );
             doList.Add( "Option to Sort files by size" );
-            doList.Add( "Startup Arguments to start FileScout in a specific directory" );
             doList.Add( "Create :help window to remind myself of the commands" );
             doList.Add( "Folder Marks: ' to view all marks in `Marks` screen; m to mark a location with prompt to name location; ' + d to delete mark" );
             doList.Add( "Color coding for Folder Marks" );
