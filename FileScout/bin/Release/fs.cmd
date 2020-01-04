@@ -1,4 +1,4 @@
 @echo off
-setlocal
 call "FileScout.exe" %1
-endlocal
+set /p LASTDIR=<%~dp0fileScoutDir
+pushd  %LASTDIR%

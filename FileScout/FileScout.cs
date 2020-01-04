@@ -11,6 +11,7 @@ namespace FileScout
         static void Main( string[] args )
         {
             Console.Title = "FileScout";
+            File.WriteAllText( Path.GetDirectoryName( System.Reflection.Assembly.GetEntryAssembly().Location ) + Path.DirectorySeparatorChar + "fileScoutDir", "" );
 
             //Reads user input on it's own thread
             Input readInput = new Input();
@@ -22,17 +23,17 @@ namespace FileScout
                 Console.WriteLine( "Args: " + args[0] );
                 if (Directory.Exists( args[0] ))
                 {
-                    State.currentPath = Path.GetFullPath(args[0]);
+                    State.currentPath = Path.GetFullPath( args[0] );
                 }
                 else
                 {
-                    Console.WriteLine("Path does not exists.");
+                    Console.WriteLine( "Path does not exists." );
                     return;
                 }
             }
             else
             {
-                    State.currentPath = Environment.GetFolderPath( Environment.SpecialFolder.UserProfile );
+                State.currentPath = Directory.GetCurrentDirectory();
             }
 
 

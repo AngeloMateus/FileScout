@@ -201,6 +201,7 @@ namespace FileScout
                     case 'q':
                         {
                             Console.Clear();
+                            File.WriteAllText( Path.GetDirectoryName( System.Reflection.Assembly.GetEntryAssembly().Location ) + Path.DirectorySeparatorChar + "fileScoutDir", State.currentPath );
                             Environment.Exit( 0 );
                         }
                         break;
