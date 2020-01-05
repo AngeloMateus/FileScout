@@ -56,7 +56,7 @@ namespace FileScout
                 }
                 catch (Exception e)
                 {
-                    Console.WriteLine( li );
+                    Console.WriteLine( e.Message );
                 }
             }
 

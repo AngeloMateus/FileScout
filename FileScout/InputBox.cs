@@ -163,7 +163,7 @@ namespace FileScout
                 Console.Clear();
                 ConsoleDisplay.Display();
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 Tools.DisplayError( new Exception( "Search returned no results" ) );
             }

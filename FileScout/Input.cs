@@ -20,7 +20,6 @@ namespace FileScout
         public void StartReading()
         {
             ConsoleKeyInfo consoleKeyInfo;
-
             do
             {
                 //maybe this is a fix? It works so far leave it for a bit
@@ -31,6 +30,7 @@ namespace FileScout
                     State.selectedFile = directoryArray[State.cursorPosY];
 
                 //Read key to change cursor
+
                 consoleKeyInfo = Console.ReadKey( true );
                 switch (consoleKeyInfo.Key)
                 {
@@ -201,7 +201,8 @@ namespace FileScout
                     case 'q':
                         {
                             Console.Clear();
-                            File.WriteAllText( Path.GetDirectoryName( System.Reflection.Assembly.GetEntryAssembly().Location ) + Path.DirectorySeparatorChar + "fileScoutDir", State.currentPath );
+                            File.WriteAllText( Path.GetDirectoryName( System.Reflection.Assembly.GetEntryAssembly().Location ) + Path.DirectorySeparatorChar +
+                                "fileScoutDir", State.currentPath );
                             Environment.Exit( 0 );
                         }
                         break;
@@ -279,6 +280,7 @@ namespace FileScout
             }
             while (consoleKeyInfo.Key != ConsoleKey.Escape);
             Console.Clear();
+            System.Environment.Exit( 0 );
         }
 
         //Select Parent folder and set cursor to this position

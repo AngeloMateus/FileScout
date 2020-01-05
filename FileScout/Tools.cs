@@ -66,7 +66,7 @@ namespace FileScout
                     totalSize += CalculateFileSize( dir );
                 }
             }
-            catch (UnauthorizedAccessException ua)
+            catch (Exception)
             {
             }
             return totalSize;
@@ -219,8 +219,8 @@ namespace FileScout
             Console.BackgroundColor = ConsoleColor.Red;
             Console.ForegroundColor = ConsoleColor.White;
             Console.Write( "(!) " + e.Message );
+            Console.ReadKey(true);
             Console.ResetColor();
-            Console.ReadKey( true );
             ConsoleDisplay.ClearLine( Console.WindowTop );
             ConsoleDisplay.ClearLine( Console.WindowTop + 1 );
         }

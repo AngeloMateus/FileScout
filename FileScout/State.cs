@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System;
 
 namespace FileScout
 {
@@ -18,6 +19,8 @@ namespace FileScout
 
         public static int activeScreen;
 
+        public static int windowWidth;
+        public static int windowHeight;
 
         public enum screens { FILESYSTEM, ABOUT, INFO };
     }

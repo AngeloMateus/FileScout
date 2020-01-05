@@ -134,6 +134,7 @@
     <Compile Include="About.cs" />
     <Compile Include="Tools.cs" />
     <Compile Include="WatchFileSystem.cs" />
+    <Compile Include="WindowProperties.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -153,7 +154,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties VsiCustomProjectConfig0="x64;False" VsiSettingsState="Initialized" VsiUseTimeUtc="False" VsiDeltaBaseDate="24/04/2019 14:47:47" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="True.True.True.True.False.False" VsiAutoInformationalVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoFileVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiEnabled="True" />
+      <UserProperties VsiEnabled="True" VsiAutoVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoFileVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoInformationalVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiConfigurationBuildAction="True.True.True.True.False.False" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="24/04/2019 14:47:47" VsiUseTimeUtc="False" VsiSettingsState="Initialized" VsiCustomProjectConfig0="x64;False" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>
