@@ -24,7 +24,7 @@ namespace FileScout
             {
                 //maybe this is a fix? It works so far leave it for a bit
                 //string[] directoryArray = CombineArrays( ConsoleDisplay.currentPath );
-                string[] directoryArray = ConsoleDisplay.files;
+                string[] directoryArray = ConsoleDisplay.currentChunkFiles;
 
                 if (!directoryArray.IsEmpty())
                     State.selectedFile = directoryArray[State.cursorPosY];
@@ -35,18 +35,12 @@ namespace FileScout
                 switch (consoleKeyInfo.Key)
                 {
                     case ConsoleKey.UpArrow:
-                        if (State.cursorPosY > 0)
-                        {
-                            State.cursorPosY--;
                             ConsoleDisplay.MoveUp();
-                        }
+                            ConsoleDisplay.Display();
                         break;
                     case ConsoleKey.DownArrow:
-                        if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
-                        {
-                            State.cursorPosY++;
                             ConsoleDisplay.MoveDown();
-                        }
+                            ConsoleDisplay.Display();
                         break;
                     case ConsoleKey.RightArrow:
                         {
@@ -82,18 +76,10 @@ namespace FileScout
                 switch (consoleKeyInfo.KeyChar)
                 {
                     case 'k':
-                        if (State.cursorPosY > 0)
-                        {
-                            State.cursorPosY--;
                             ConsoleDisplay.MoveUp();
-                        }
                         break;
                     case 'j':
-                        if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
-                        {
-                            State.cursorPosY++;
                             ConsoleDisplay.MoveDown();
-                        }
                         break;
                     case 'l':
                         {

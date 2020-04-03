@@ -14,6 +14,7 @@ namespace FileScout
             string intro = "FileScout version " + FileVersionInfo.GetVersionInfo( Assembly.GetExecutingAssembly().Location ).ProductVersion;
             List<string> doList = new List<string>();
 
+            doList.Add( "PRIORITY: New Display - when changin directory cursor position needs to match (chunk,index) not just index" );
             doList.Add( "On rename/newfile/newfolder change cursor position to the file to alter and rename from there" );
             doList.Add( "Add TAB auto-complete for : commands" );
             doList.Add( "Search child directories WITH REGEX!" );

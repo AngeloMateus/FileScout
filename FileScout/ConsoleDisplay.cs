@@ -1,6 +1,7 @@
 ﻿using System;
 using System.IO;
 using System.Threading;
+using System.Linq;
 
 namespace FileScout
 {
@@ -8,6 +9,8 @@ namespace FileScout
     class ConsoleDisplay
     {
         public static string[] files;
+        public static string[] currentChunkFiles;
+        private static string[][] fileChunks;
         private static string[] currentFileList;
         private static string parentDirectory;
         private static StreamWriter writer;
@@ -29,53 +32,53 @@ namespace FileScout
 
             try
             {
-                //Sort and combine Directories and files
+                //Sort and combine Directories and Files
                 files = CombineArrays( State.currentPath );
-
-                if (files.Length > Console.WindowHeight)
-                {
-                    Console.SetBufferSize( Console.WindowWidth, files.Length + Console.WindowHeight );
-                }
-                else
-                {
-                    Console.SetBufferSize( Console.WindowWidth,  Console.WindowHeight );
-                }
+                //Create file chunk sizes to fit in window
+                fileChunks = ChunkerizeFiles( files );
 
                 Console.SetCursorPosition( 0, Console.WindowTop + 5 );
 
                 if (Tools.IsEmpty( files ))
-                    writer.WriteLine( "    (empty)" );
-                //Output all files and folders
-                for (int i = 0; i < files.Length; i++)
                 {
-                    string copiedIndicator;
-                    if (Tools.selectionRegister.Contains( files[i] )) { copiedIndicator = "*"; } else { copiedIndicator = " "; };
-                    if (State.cursorPosY == i)
+                    writer.WriteLine( "    (empty)" );
+                }
+                else
+                {
+                    //Output all files and folders
+                    currentChunkFiles = fileChunks[State.currentFileChunk];
+
+                    for (int j = 0; j < currentChunkFiles.Length; j++)
                     {
-                        FileAttributes attr = File.GetAttributes( files[i] );
-                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                        string copiedIndicator;
+                        if (Tools.selectionRegister.Contains( currentChunkFiles[j] )) { copiedIndicator = "*"; } else { copiedIndicator = " "; };
+                        if (State.cursorPosY == j)
                         {
-                            writer.WriteLine( " ->" + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
-                            State.selectedFile = Path.GetFullPath( files[i] );
+                            FileAttributes attr = File.GetAttributes( currentChunkFiles[j] );
+                            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                            {
+                                writer.WriteLine( " ->" + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( currentChunkFiles[j] ), 26 ) + "\\" );
+                                State.selectedFile = Path.GetFullPath( currentChunkFiles[j] );
+                            }
+                            else
+                            {
+                                writer.WriteLine( " ->" + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( currentChunkFiles[j] ), 26 )
+                                    + Path.GetExtension( currentChunkFiles[j] ), Tools.DisplayFileSize( currentChunkFiles[j] ) );
+                                State.selectedFile = Path.GetFullPath( currentChunkFiles[j] );
+                            }
                         }
-                        else
+                        else if (State.cursorPosY != j)
                         {
-                            writer.WriteLine( " ->" + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
-                                + Path.GetExtension( files[i] ), Tools.DisplayFileSize( files[i] ) );
-                            State.selectedFile = Path.GetFullPath( files[i] );
-                        }
-                    }
-                    else if (State.cursorPosY != i)
-                    {
-                        FileAttributes attr = File.GetAttributes( files[i] );
-                        if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-                        {
-                            writer.WriteLine( "   " + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( files[i] ), 26 ) + "\\" );
-                        }
-                        else
-                        {
-                            writer.WriteLine( "   " + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[i] ), 26 )
-                                + Path.GetExtension( files[i] ), Tools.DisplayFileSize( files[i] ) );
+                            FileAttributes attr = File.GetAttributes( currentChunkFiles[j] );
+                            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                            {
+                                writer.WriteLine( "   " + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( currentChunkFiles[j] ), 26 ) + "\\" );
+                            }
+                            else
+                            {
+                                writer.WriteLine( "   " + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( currentChunkFiles[j] ), 26 )
+                                    + Path.GetExtension( currentChunkFiles[j] ), Tools.DisplayFileSize( currentChunkFiles[j] ) );
+                            }
                         }
                     }
                 }
@@ -88,6 +91,10 @@ namespace FileScout
                 State.currentPath = Directory.GetParent( State.currentPath ).ToString();
                 Display();
                 Tools.DisplayError( new Exception( "Access Denied" ) );
+            }
+            catch (IndexOutOfRangeException e)
+            {
+                Tools.DisplayError(e);
             }
 
             writer.Flush();
@@ -172,87 +179,115 @@ namespace FileScout
         public static void MoveDown()
         {
             Console.CursorVisible = false;
-            string copiedIndicator;
-            if (Tools.selectionRegister.Contains( State.selectedFile )) { copiedIndicator = "*"; } else { copiedIndicator = " "; };
-
-            FileAttributes attr = File.GetAttributes( files[State.cursorPosY - 1] );
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            if (State.cursorPosY == currentChunkFiles.Length - 1)
             {
-                writer.WriteLine( "   " + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( files[State.cursorPosY - 1] ), 26 ) + "\\" );
+                if(State.currentFileChunk + 1< fileChunks.Length)
+                State.currentFileChunk += 1 ;
+                State.cursorPosY = 0;
+                Display();
             }
             else
             {
-                writer.WriteLine( "   " + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY - 1] ), 26 )
-                    + Path.GetExtension( files[State.cursorPosY - 1] ), Tools.DisplayFileSize( files[State.cursorPosY - 1] ) );
-            }
+                if (State.cursorPosY < ConsoleDisplay.files.Length - 1)
+                {
+                    State.cursorPosY++;
 
-            attr = File.GetAttributes( files[State.cursorPosY] );
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-            {
-                writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileName( files[State.cursorPosY] ), 26 ) + "\\" );
-                State.selectedFile = Path.GetFullPath( files[State.cursorPosY] );
-            }
-            else
-            {
-                writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY] ), 26 )
-                    + Path.GetExtension( files[State.cursorPosY] ), Tools.DisplayFileSize( files[State.cursorPosY] ) );
-                State.selectedFile = Path.GetFullPath( files[State.cursorPosY] );
-            }
-            ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
-            Console.SetCursorPosition( 0, State.cursorPosY + topPadding - 1 );
-            writer.Flush();
+                    string copiedIndicator;
+                    if (Tools.selectionRegister.Contains( State.selectedFile )) { copiedIndicator = "*"; } else { copiedIndicator = " "; };
 
-            //Clear top of window and write current path
-            ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
-            Console.SetCursorPosition( 0, Console.WindowTop );
-            WriteCurrentPath();
-            if (Console.BufferWidth > 94) { new ConsoleDisplayChild(); }
-            //new FilePreview();
-            if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
+                    FileAttributes attr = File.GetAttributes( currentChunkFiles[State.cursorPosY - 1] );
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        writer.WriteLine( "   " + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( currentChunkFiles[State.cursorPosY - 1] ), 26 ) + "\\" );
+                    }
+                    else
+                    {
+                        writer.WriteLine( "   " + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( currentChunkFiles[State.cursorPosY - 1] ), 26 )
+                            + Path.GetExtension( currentChunkFiles[State.cursorPosY - 1] ), Tools.DisplayFileSize( currentChunkFiles[State.cursorPosY - 1] ) );
+                    }
+
+                    attr = File.GetAttributes( currentChunkFiles[State.cursorPosY] );
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        writer.WriteLine( " -> > " + ShortenFileName( Path.GetFileName( currentChunkFiles[State.cursorPosY] ), 26 ) + "\\" );
+                        State.selectedFile = Path.GetFullPath( currentChunkFiles[State.cursorPosY] );
+                    }
+                    else
+                    {
+                        writer.WriteLine( " -> {0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( currentChunkFiles[State.cursorPosY] ), 26 )
+                            + Path.GetExtension( currentChunkFiles[State.cursorPosY] ), Tools.DisplayFileSize( currentChunkFiles[State.cursorPosY] ) );
+                        State.selectedFile = Path.GetFullPath( currentChunkFiles[State.cursorPosY] );
+                    }
+                    ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
+                    Console.SetCursorPosition( 0, State.cursorPosY + topPadding - 1 );
+                    writer.Flush();
+
+                    //Clear top of window and write current path
+                    ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
+                    Console.SetCursorPosition( 0, Console.WindowTop );
+                    WriteCurrentPath();
+                    if (Console.BufferWidth > 94) { new ConsoleDisplayChild(); }
+                    //new FilePreview();
+                    if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
+                }
+            }
         }
 
         public static void MoveUp()
         {
             Console.CursorVisible = false;
-            Console.SetCursorPosition( 0, State.cursorPosY + topPadding );
-
-            string copiedIndicator;
-            if (Tools.selectionRegister.Contains( files[State.cursorPosY] )) { copiedIndicator = "*"; } else { copiedIndicator = " "; };
-
-            FileAttributes attr = File.GetAttributes( files[State.cursorPosY] );
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+            if (State.cursorPosY == 0 && State.currentFileChunk > 0)
             {
-                writer.WriteLine( " ->" + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( files[State.cursorPosY] ), 26 ) + "\\" );
-                State.selectedFile = Path.GetFullPath( files[State.cursorPosY] );
+                State.currentFileChunk -= 1;
+                State.cursorPosY = currentChunkFiles.Length -1;
+                Display();
             }
             else
             {
-                writer.WriteLine( " ->" + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY] ), 26 )
-                    + Path.GetExtension( files[State.cursorPosY] ), Tools.DisplayFileSize( files[State.cursorPosY] ) );
-                State.selectedFile = Path.GetFullPath( files[State.cursorPosY] );
-            }
+                if (State.cursorPosY > 0)
+                {
+                    State.cursorPosY--;
+                    Console.SetCursorPosition( 0, State.cursorPosY + topPadding );
 
-            if (Tools.selectionRegister.Contains( files[State.cursorPosY + 1] )) { copiedIndicator = "*"; } else { copiedIndicator = " "; };
-            attr = File.GetAttributes( files[State.cursorPosY + 1] );
-            if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
-            {
-                writer.WriteLine( "   " + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( files[State.cursorPosY + 1] ), 26 ) + "\\" );
-            }
-            else
-            {
-                writer.WriteLine( "   " + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( files[State.cursorPosY + 1] ), 26 )
-                    + Path.GetExtension( files[State.cursorPosY + 1] ), Tools.DisplayFileSize( files[State.cursorPosY + 1] ) );
-            }
-            writer.Flush();
+                    string copiedIndicator;
+                    if (Tools.selectionRegister.Contains( currentChunkFiles[State.cursorPosY] )) { copiedIndicator = "*"; } else { copiedIndicator = " "; };
 
-            //Clear top of window and Write Current Directory
-            Console.SetCursorPosition( 0, State.cursorPosY );
-            ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
-            Console.SetCursorPosition( 0, Console.WindowTop );
-            WriteCurrentPath();
-            if (Console.BufferWidth > 94) { new ConsoleDisplayChild(); }
-            //new FilePreview();
-            if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
+                    FileAttributes attr = File.GetAttributes( currentChunkFiles[State.cursorPosY] );
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        writer.WriteLine( " ->" + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( currentChunkFiles[State.cursorPosY] ), 26 ) + "\\" );
+                        State.selectedFile = Path.GetFullPath( currentChunkFiles[State.cursorPosY] );
+                    }
+                    else
+                    {
+                        writer.WriteLine( " ->" + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( currentChunkFiles[State.cursorPosY] ), 26 )
+                            + Path.GetExtension( currentChunkFiles[State.cursorPosY] ), Tools.DisplayFileSize( currentChunkFiles[State.cursorPosY] ) );
+                        State.selectedFile = Path.GetFullPath( currentChunkFiles[State.cursorPosY] );
+                    }
+
+                    if (Tools.selectionRegister.Contains( currentChunkFiles[State.cursorPosY + 1] )) { copiedIndicator = "*"; } else { copiedIndicator = " "; };
+                    attr = File.GetAttributes( currentChunkFiles[State.cursorPosY + 1] );
+                    if ((attr & FileAttributes.Directory) == FileAttributes.Directory)
+                    {
+                        writer.WriteLine( "   " + copiedIndicator + "> " + ShortenFileName( Path.GetFileName( currentChunkFiles[State.cursorPosY + 1] ), 26 ) + "\\" );
+                    }
+                    else
+                    {
+                        writer.WriteLine( "   " + copiedIndicator + "{0,-40}{1,16}", ShortenFileName( Path.GetFileNameWithoutExtension( currentChunkFiles[State.cursorPosY + 1] ), 26 )
+                            + Path.GetExtension( currentChunkFiles[State.cursorPosY + 1] ), Tools.DisplayFileSize( currentChunkFiles[State.cursorPosY + 1] ) );
+                    }
+                    writer.Flush();
+
+                    //Clear top of window and Write Current Directory
+                    Console.SetCursorPosition( 0, State.cursorPosY );
+                    ClearBlock( Console.WindowTop, Console.WindowTop + 5 );
+                    Console.SetCursorPosition( 0, Console.WindowTop );
+                    WriteCurrentPath();
+                    if (Console.BufferWidth > 94) { new ConsoleDisplayChild(); }
+                    //new FilePreview();
+                    if (Tools.selectionRegister.Contains( State.selectedFile )) RedrawSelectedFile();
+                }
+            }
         }
 
         private static void WriteCurrentPath()
@@ -299,6 +334,18 @@ namespace FileScout
             }
             else
                 return path;
+        }
+
+        private static string[][] ChunkerizeFiles( string[] files )
+        {
+            //Divides files array into numbered chunks [chunk][file]
+            string[][] chunks = files
+            .Select( ( s, i ) => new { Value = s, Index = i } )
+            .GroupBy( x => x.Index / (Console.WindowHeight - topPadding - 1) )
+            .Select( grp => grp.Select( x => x.Value ).ToArray() )
+            .ToArray();
+
+            return chunks;
         }
     }
 }

@@ -195,14 +195,15 @@ namespace FileScout
             Console.Clear();
             Console.WriteLine( "****DEBUG****\n\n" );
             Console.WriteLine( "State.activeScreen: " + State.activeScreen + "\n" );
-            Console.WriteLine( "ConsoleDisplay.files: " );
-            for (int i = 0; i < ConsoleDisplay.files.Length; i++)
+            Console.WriteLine( "ConsoleDisplay.currentChunkFiles: " );
+            for (int i = 0; i < ConsoleDisplay.currentChunkFiles.Length; i++)
             {
-                Console.WriteLine( ConsoleDisplay.files[i] );
+                Console.WriteLine( ConsoleDisplay.currentChunkFiles[i] );
             }
             Console.WriteLine( "\nselectedFile: " + State.selectedFile );
             Console.WriteLine( "\nState.CursorPosY: " + State.cursorPosY );
             Console.WriteLine( "\nState.currentPath: " + State.currentPath );
+            Console.WriteLine( "\nState.currentFileChunk: " + State.currentFileChunk );
             Console.WriteLine( "\nState.findKeyMatches" );
             State.findKeyMatches.ForEach( ( x ) => Console.WriteLine( x ) );
             Console.WriteLine( "\nBuffers H - W" );

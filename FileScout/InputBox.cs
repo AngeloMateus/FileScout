@@ -78,7 +78,7 @@ namespace FileScout
                     {
                         try
                         {
-                            Console.SetBufferSize( Console.WindowWidth, 999);
+                            Console.SetBufferSize( Console.WindowWidth, 999 );
                             new ChildProcess( command );
                         }
                         catch (Exception e)
@@ -214,24 +214,26 @@ namespace FileScout
             if (file.IsEmpty())
             {
                 ConsoleDisplay.Display();
-            } else { 
+            }
+            else
+            {
 
-            try
-            {
-                if( !Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
+                try
                 {
-                    Directory.CreateDirectory( State.currentPath + Path.DirectorySeparatorChar + file );
+                    if (!Directory.Exists( State.currentPath + Path.DirectorySeparatorChar + file ))
+                    {
+                        Directory.CreateDirectory( State.currentPath + Path.DirectorySeparatorChar + file );
+                    }
+                    else
+                    {
+                        throw new System.Exception( "Directory " + file + " already exists!" );
+                    }
                 }
-                else 
+                catch (Exception e)
                 {
-                    throw new System.Exception("Directory " + file + " already exists!");
+                    Tools.DisplayError( e );
                 }
             }
-            catch (Exception e)
-            {
-                Tools.DisplayError( e );
-            }
-           }
         }
 
         public void NewFile()
@@ -318,6 +320,7 @@ namespace FileScout
                 {
                     if ((attr & FileAttributes.Directory) != FileAttributes.Directory)
                     {
+                        Console.Clear();
                         State.selectedFile = null;
                         File.Delete( file );
                         Console.WriteLine( "Deleted: " + file );

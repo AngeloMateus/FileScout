@@ -120,11 +120,12 @@
   <ItemGroup>
     <Compile Include="AlphaNumComparer.cs" />
     <Compile Include="ChildProcess.cs" />
+    <Compile Include="ConsoleDisplay.cs" />
     <Compile Include="FilePreview.cs" />
     <Compile Include="SelectionRegisterScreen.cs" />
     <Compile Include="ConsoleDisplayChild.cs" />
     <Compile Include="State.cs" />
-    <Compile Include="ConsoleDisplay.cs" />
+    <Compile Include="_ConsoleDisplay.cs" />
     <Compile Include="FileInfoScreen.cs" />
     <Compile Include="History.cs" />
     <Compile Include="InputBox.cs" />
@@ -154,7 +155,7 @@
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <ProjectExtensions>
     <VisualStudio>
-      <UserProperties VsiEnabled="True" VsiAutoVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoFileVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoInformationalVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiConfigurationBuildAction="True.True.True.True.False.False" VsiUseGlobalBaseDate="True" VsiDeltaBaseDate="24/04/2019 14:47:47" VsiUseTimeUtc="False" VsiSettingsState="Initialized" VsiCustomProjectConfig0="x64;False" />
+      <UserProperties VsiCustomProjectConfig0="x64;False" VsiSettingsState="Initialized" VsiUseTimeUtc="False" VsiDeltaBaseDate="24/04/2019 14:47:47" VsiUseGlobalBaseDate="True" VsiConfigurationBuildAction="True.True.True.True.False.False" VsiAutoInformationalVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoFileVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiAutoVersion="DoNothing.Increment.YearDayOfYear.DoNothing" VsiEnabled="True" />
     </VisualStudio>
   </ProjectExtensions>
 </Project>

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System;
+﻿using System;
+using System.Collections.Generic;
 
 namespace FileScout
 {
@@ -22,6 +22,7 @@ namespace FileScout
         public static int windowWidth;
         public static int windowHeight;
 
+        public static int currentFileChunk;
         public enum screens { FILESYSTEM, ABOUT, INFO };
     }
 }
